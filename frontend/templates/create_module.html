@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Module — Food Computing Academy</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/module_creation.css') }}">
+</head>
+<body>
+
+<!-- NAV -->
+<!-- <nav>
+    <a href="/" class="nav-logo">
+        <div class="nav-logo-circle">
+            <img src="{{ url_for('static', filename='assets/food_computing_logo.jpg') }}" alt="logo">
+        </div>
+        Food Computing Academy
+    </a>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about_team">About us</a></li>
+        <li><a href="/programs">Programs</a></li>
+        <li><a href="/news">News ▾</a></li>
+    </ul>
+    <div class="nav-right">
+        <span class="cm-user-email">{{ session.get('user_email') }}</span>
+        <a href="/admin" class="btn-signin">← Admin</a>
+        <a href="/logout" class="btn-signin">Log out</a>
+    </div>
+</nav> -->
+
+<!-- NAV -->
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- PAGE -->
+<div class="cm-page">
+    <h1>Create Module</h1>
+    <p class="cm-subtitle">Make your module here: Courses must have 2 - 20 parts, and you can add body / pdf / youtube embeds here also. Build each page. </p>
+
+    <div class="steps">
+        <div class="step active" id="step-ind-1">
+            <div class="step-num">1</div> Module details
+        </div>
+        <div class="step-line"></div>
+        <div class="step" id="step-ind-2">
+            <div class="step-num">2</div> Parts &amp; content </div>
+        <div class="step-line"></div>
+        <div class="step" id="step-ind-3">
+            <div class="step-num">3</div> Done </div>
+    </div>
+
+    <div id="status-success" class="cm-success"></div>
+    <div id="status-error" class="cm-error"></div>
+
+    <div id="step-1">
+        <div class="cm-card">
+            <h2>Module details</h2>
+
+            <div class="form-group">
+                <label for="mod-title">Title *</label>
+                <input type="text" id="mod-title" placeholder="e.g. Introduction to Food Safety">
+            </div>
+
+            <div class="form-group">
+                <label for="mod-desc">Description</label>
+                <textarea id="mod-desc" placeholder="What will students learn in this module?"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Upload Cover Image</label>
+                <div class="image_container">
+                    <!-- https://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded -->
+                    <input multiple accept="image/*" type="file" id="mod-image" name="mod-image" />  
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mod-price">Price (Dollars) — set 0 for free</label>
+                <input type="number" id="mod-price" value="0" min="0">
+            </div>
+        </div>
+
+        <div class="cm-actions">
+            <span></span>
+            <button class="btn-submit cm-submit-small" onclick="submitModule()">
+                Save &amp; continue 
+            </button>
+        </div>
+    </div>
+
+
+    
+    <div id="step-2" class="cm-hidden">
+        <div class="cm-card">
+            <h2>Parts</h2>
+            <p class="part-count"> <span id="part-count-num">0</span> / 20 parts added </p>
+
+            <!-- parts are injected here -->
+            <div id="parts-container"></div>
+
+            <button class="btn-ghost-green" onclick="addPart()" id="btn-add-part">
+                + Add part
+            </button>
+        </div>
+
+
+        <div class="cm-card">
+            <h2>Final exam</h2>
+            <div class="final-exam-toggle">
+            <input type="checkbox" id="has-final-exam" 
+                onchange="toggleBlock('final-exam-block', this.checked)">
+                       <label for="has-final-exam" class="cm-muted-label">
+                    Add a final exam at the end of this module?
+                </label>
+            </div>
+
+            <div id="final-exam-block" class="cm-hidden">
+                <div class="form-group">
+                    <label>Exam title</label>
+                    <input type="text" id="final-exam-title" placeholder="e.g. Final Exam">
+                </div>
+                <div class="pass-row">
+                    <label>Pass mark</label>
+                    <input type="number" id="final-exam-pass" value="50" min="0" max="100">
+                    <span class="cm-muted-text">%</span>
+                </div>
+                <div id="final-exam-questions" class="cm-margin-top"></div>
+                <button class="btn-ghost cm-small-top" onclick="addQuestion('final', null)"> + Add question </button>
+            </div>
+        </div>
+
+        <div class="cm-actions">
+        <button class="btn-ghost" onclick="setStep(1)"> Back</button>
+            <button class="btn-submit cm-submit-small" onclick="submitAll()">
+                Publish module ✓
+            </button>
+        </div>
+    </div>
+
+    <div id="step-3" class="cm-hidden">
+        <div class="cm-card cm-done-card">
+            <div class="cm-done-icon">✓</div>
+            <h2 class="cm-done-title">Module published!</h2>
+            <p class="cm-done-text"> Your module has been created </p>
+            <div class="cm-done-actions">
+                <a href="/admin/create_module" class="btn-primary">Create another</a>
+                <a href="/admin" class="btn-signin">Back to admin</a>
+            </div>
+        </div></div>
+
+</div>
+
+<!-- FOOTER -->
+{% include 'footer.html' %}
+<script src="{{ url_for('static', filename='js/create_module.js') }}"></script>
+
+</body>
+</html>

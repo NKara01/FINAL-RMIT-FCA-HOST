@@ -1,0 +1,145 @@
+:root {
+    --navy:      #0e1c3d;
+    --navy-mid:  #192d56;
+}
+
+h1{
+    
+    width:100%;
+    padding: 4rem;
+    font-size: 200%;
+}
+
+
+.module_view{
+    background-color: #ffffff;
+    width:100%;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: var(--navy);
+    min-height:300px;
+}
+
+.module_view_header{
+background: linear-gradient( to right, #2466ca, #01924e);
+}
+.module_image {
+    object-fit: cover;
+    display: block;
+}
+.allmodules{
+    max-width: 930px;
+    
+    
+    }
+.module_information{
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 2rem;
+    gap: 2rem;
+    width:70%;
+}
+
+.module_information img{
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+}
+.purchase_sidebar{
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 2rem;
+    gap: 2rem;
+    width:25%;
+
+    margin: 20px;
+    margin-left: auto;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0px 3px 10px rgb(56, 223, 131);
+    height: fit-content;
+
+}
+.purchase_sidebar b{
+    font-size: 250%;
+}
+.purchase_sidebar .btn-submit{
+    width: 100%;
+    text-align: center;
+}
+
+.module_part_view {
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 75%;
+        border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0px 0px 5px rgb(187, 187, 187);
+}
+.module_part_view .part{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    border-radius: 15px;
+    padding: 0.75rem;
+    padding-left:5%;
+    background-color: #ffffff;
+    border: 1px solid #e6e6e6;
+    box-shadow: 0px 0px 5px rgb(56, 223, 131);
+}
+
+.module_part_view p{
+    margin-left:auto;
+}
+
+
+.purchase_sidebar h5{
+    font-size: 150%;
+}
+.purchase_sidebar .progress_bar{
+    width: 100%;
+    background-color: #dddddd;
+    position:relative;
+}
+.purchase_sidebar .progress_bar_fill{
+    background-color: var(--green);
+    height:100%;
+    position:absolute;
+    top: 0;
+    left: 0;
+}
+.progress_bar {
+    width: 100%;
+height: 20px;
+    /* max-height:110%; */
+    background-color: #e6e6e6;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 0.75rem;
+
+}
+
+.progress_bar_fill {
+    background-color: var(--green);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    padding-left: 0.8rem;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #121212;
+    font-family: 'Sora', sans-serif;
+    white-space: nowrap;
+}

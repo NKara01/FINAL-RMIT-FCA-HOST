@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    
+</head>
+<body>
+
+<!-- NAV -->
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+<div class="form-container">
+    <h2>Create Account</h2>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form action="/create_account" method="POST">
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="first_name" placeholder="John.." required>
+        </div>
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="last_name" placeholder="Doe.." required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="john@email.com..." required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Your password..." required>
+        </div>
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" name="check_password" placeholder="Confirm your password..." required>
+        </div>
+        <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+    <div class="form-link">Already have an account? <a href="/login">Sign in</a></div>
+</div>
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+</body>
+</html>

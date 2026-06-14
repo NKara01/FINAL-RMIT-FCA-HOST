@@ -1,0 +1,384 @@
+:root {
+    --darker: #121212;
+    --greyer: #cecece;
+    --green: #2bcc87;
+}
+
+.modules_title {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    background-image: url('../assets/backteria.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.intro_left,
+.intro_right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.intro_left {
+    width: 65%;
+    background: linear-gradient(to right, #2466caa9, #01924e91);
+}
+
+.intro_right {
+    width: 35%;
+    background: linear-gradient(to left, #2466caa9, #af43c291);
+}
+
+.module_card_title {
+    display: flex;
+}
+
+.module_title_section {
+    flex: 2;
+}
+
+.paid_module_section {
+    display: flex;
+}
+
+.modules_title h1 {
+    font-size: 300%;
+}
+
+.modules_list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 3rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    gap: 2rem;
+    background-color: #ffffff;
+}
+
+.modules_list .module {
+    background-color: white;
+    color: var(--darker);
+    transition: 0.5s ease;
+    padding: 2rem;
+    gap: 1rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: 1px solid #afafaf;
+    box-shadow: 0 0 3px #b1b1b1;
+}
+
+.modules_list .module:hover {
+    transition: 0.3s ease;
+    transform: translateY(-4px);
+    box-shadow: 0 0 15px #9e9e9e;
+}
+
+.module .title {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.module_image {
+    object-fit: cover;
+    display: block;
+}
+
+.allmodules {
+    max-width: 20px;
+}
+
+.yourmodule {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 20px;
+    border: 0.5px solid #afafaf;
+}
+
+.module h3 {
+    font-size: 1.2rem;
+}
+
+.module p {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+    color: #444;
+}
+
+.module_description {
+    padding-top: 1rem;
+    color: #555555;
+}
+
+.module .price {
+    font-size: 1.2rem;
+    padding: 0 1.5rem;
+}
+
+.module .actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    margin-top: auto;
+    align-items: stretch;
+}
+
+.module .actions a,
+.module .actions button {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 0;
+    border-radius: 24px;
+    font-size: 0.9rem;
+}
+
+.enMoney::before {
+    content: "$";
+}
+
+.module_features {
+    padding: 2rem;
+    padding-left: 10%;
+    padding-right: 10%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+}
+
+.module_image_wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.module_image_wrap .module_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn-submit {
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+    height: 50px;
+    max-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+}
+
+form {
+    width: auto;
+    margin-left: 0;
+}
+
+.module .actions form {
+    flex: 1;
+    width: auto;
+    margin-left: 0;
+}
+
+form .btn-submit {
+    width: 100%;
+}
+
+.btn-search {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    justify-content: center;
+    color: var(--white);
+    padding: 0.8rem 1rem;
+    white-space: nowrap;
+}
+
+.btn-search img {
+    width: 10px;
+    margin-right: 0.5rem;
+}
+
+.search-box {
+    background: var(--darker);
+    padding: 1rem 1.5rem;
+    display: flex;
+    border-radius: 24px;
+    gap: 1rem;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-box input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    flex: 1;
+}
+
+.module_features .search-box {
+    flex: 1 1 320px;
+    width: auto;
+    margin: 0;
+}
+
+.paginator {
+    background-color: #ffffff;
+}
+
+/* your modules_specifc */
+.your_progress_section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.progress_bar {
+    width: 100%;
+    height: 20px;
+    background-color: #e6e6e6;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 0.75rem;
+}
+
+.progress_bar_fill {
+    background-color: var(--green);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #121212;
+    font-family: 'Sora', sans-serif;
+    white-space: nowrap;
+}
+
+.modules_list .module.purchased {
+    border: 3px solid var(--green);
+    box-shadow: 0 0 12px var(--green);
+}
+
+.progress_label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #121212;
+    font-family: 'Sora', sans-serif;
+}
+
+@media (max-width: 1100px) {
+    .modules_list {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 2rem;
+        gap: 1.5rem;
+    }
+
+    .module_features {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    .modules_title {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .intro_left,
+    .intro_right {
+        width: 100%;
+        min-height: 140px;
+        padding: 1.5rem;
+        box-sizing: border-box;
+    }
+
+    .modules_title h1 {
+        font-size: 220%;
+        margin: 0;
+    }
+
+    .module_features {
+        padding: 1rem;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .module_features .search-box,
+    .btn-search {
+        width: 100%;
+    }
+
+    .modules_list {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .module .actions {
+        flex-direction: column;
+    }
+
+    .module .actions form,
+    .module .actions a,
+    .module .actions button {
+        width: 100%;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modules_title h1 {
+        font-size: 180%;
+    }
+
+    .modules_list .module {
+        padding: 1.25rem;
+    }
+
+    .module .actions {
+        padding: 1rem 0;
+    }
+
+    .module p,
+    .module .price {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .search-box {
+        padding: 0.85rem 1rem;
+    }
+}

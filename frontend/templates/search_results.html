@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search{% if query %} — {{ query }}{% endif %} | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/search.css') }}">
+</head>
+<body>
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+<div class="search-page">
+
+    <div class="search-hero">
+        <h1>Search</h1>
+        <form class="search-form" method="GET" action="{{ url_for('search') }}">
+            <input
+                type="text" name="q"
+                value="{{ query | e }}"
+                placeholder="Search articles, news, modules, events, forum…"
+                autocomplete="off" autofocus >
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    {% if query %}
+        <p class="search-meta">
+            {% if total > 0 %}
+                <strong>{{ total }}</strong> result{{ 's' if total != 1 }} for
+                <strong>"{{ query | e }}"</strong>
+                {% if pages > 1 %}&nbsp;— page {{ page }} of {{ pages }}{% endif %}
+            {% else %}
+                No results for <strong>"{{ query | e }}"</strong>
+            {% endif %}
+        </p>
+
+        {% if total > 0 %}
+            <div class="search-tabs">
+                <button class="search-tab active" data-filter="all">
+                    All <span class="search-tab-count">{{ total }}</span>  </button>
+               
+               
+                    {% for key in tier_order %}
+                    {% if grouped[key] %}
+                       
+                    
+                    <button class="search-tab" data-filter="{{ key }}">
+                            {{ tiers[key] }}
+                            <span class="search-tab-count">{{ grouped[key]|length }}</span>
+                        </button>
+                    {% endif %} {% endfor %}
+            </div>
+
+            <ul class="search-results">
+                {% for r in results %}
+                <li class="search-result-card-wrap" data-type="{{ r.type }}">
+                    <a class="search-result-card" href="{{ r.url }}">
+
+                        <div class="result-thumb">
+                            {% if r.image_url and r.image_url not in ('NIL', '') %}
+                                <img src="{{ url_for('static', filename=r.image_url) }}" alt="" loading="lazy">
+                            {% else %}
+                                {% if r.type == 'article' %}
+                                {% elif r.type == 'news' %}
+                                {% elif r.type == 'module' %}
+                                {% elif r.type == 'event' %}
+                                {% else %}
+                                {% endif %} 
+                            {% endif %}
+                        </div>
+
+                        <div class="result-body">
+                            <div class="result-header">
+                                <span class="result-badge badge-{{ r.type }}">{{ r.tier_label }}</span>
+                                <span class="result-title">{{ r.title }}</span>
+                            </div>
+
+                            
+                            <p class="result-snippet">{{ r.snippet }}</p>
+                            <div class="result-meta">
+                                {% if r.type == 'module' %}
+                                    {% if r.meta and r.meta != '0' %}${{ r.meta }}{% else %}Free{% endif %}
+                                {% else %}
+                                    {% if r.meta %}By {{ r.meta }}{% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if pages > 1 %}
+            <nav class="search-pagination">
+                <a href="?q={{ query|urlencode }}&page={{ page-1 }}"
+                   class="{% if page <= 1 %}pg-disabled{% endif %}">&#8592;</a>
+                {% for p in range(1, pages+1) %}
+                    {% if p == page %}
+                        <span class="pg-current">{{ p }}</span>
+                    {% elif p == 1 or p == pages or (p >= page-2 and p <= page+2) %}
+                        <a href="?q={{ query|urlencode }}&page={{ p }}">{{ p }}</a>
+                    {% elif p == page-3 or p == page+3 %}
+                        <span>…</span>
+                    {% endif %}
+                {% endfor %}
+                <a href="?q={{ query|urlencode }}&page={{ page+1 }}"
+                   class="{% if page >= pages %}pg-disabled{% endif %}">&#8594;</a>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <div class="search-empty">
+                <div class="search-empty-icon">🔍</div>
+                <h3>Nothing found</h3>
+                <p>Try different keywords or check the spelling.</p>
+            </div>
+        {% endif %}
+
+    {% else %}
+<div class="search-empty">
+    <div class="search-empty-inner">
+        <div class="search-empty-icon">🔍</div>
+        <h3>Nothing found for "{{ query | e }}"</h3>
+        <p>Try different keywords or check the spelling.</p>
+        <div class="search-suggestions">
+            <a class="search-suggestion-tag" href="{{ url_for('search', q='nutrition') }}">Nutrition</a>
+            <a class="search-suggestion-tag" href="{{ url_for('search', q='food science') }}">Food Science</a>
+            <a class="search-suggestion-tag" href="{{ url_for('search', q='modules') }}">Modules</a>
+            <a class="search-suggestion-tag" href="{{ url_for('search', q='events') }}">Events</a>
+        </div>
+    </div>
+</div>
+    {% endif %}
+
+</div>
+
+{% include 'footer.html' %}
+<script>
+(function () {
+    const tabs  = document.querySelectorAll('.search-tab');
+    const items = document.querySelectorAll('.search-result-card-wrap');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const f = tab.dataset.filter;
+            items.forEach(item => {
+                item.style.display = (f === 'all' || item.dataset.type === f) ? '' : 'none';
+            });
+        });
+    });
+
+    const q = {{ query | tojson }};
+    if (q) {
+        const stop = new Set(['a','an','the','and','or','in','on','at','to','for','of','is','it','with']);
+        const terms = q.toLowerCase().split(/\W+/).filter(t => t.length > 2 && !stop.has(t));
+        if (terms.length) {
+            const re = new RegExp(`(${terms.map(s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})`, 'gi');
+            document.querySelectorAll('.result-title').forEach(el => {
+                el.innerHTML = el.textContent.replace(re, '<mark>$1</mark>');
+            });
+            document.querySelectorAll('.result-snippet').forEach(el => {
+                el.innerHTML = el.textContent.replace(re, '<mark>$1</mark>');
+            });
+        }
+    }
+})();
+</script>
+
+</body>
+</html>

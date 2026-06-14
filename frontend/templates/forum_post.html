@@ -1,0 +1,284 @@
+<!-- ITS A FORUM... BUT WITH A THREAD! -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{question.title}} | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/forum_thread.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/comments.css') }}">
+</head>
+<body>
+
+<!-- NAV -->
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+<!-- FORUM POST CODE -->
+<div class="full_area">
+    <div class="post_title">
+        <a class="image" href="/profile/{{question.user_id}}">
+            <img src="{{ url_for('static', filename=question.avatar) }}" alt="{{question.author.username}}">
+        </a>
+        <div class="topsection">
+            <div class="titlearea">
+                <h1>{{question.title}}</h1>
+                <div class="date">{{question.date}}</div>
+            </div>
+            <h4 class="username">By: {{question.author.username}}</h4>
+            {% if question.deleted == 0 %}
+                <p class="paragraph">{{question.body}}</p>
+            {% elif question.deleted == 1 %}
+               <b class="deleted_thread error-banner">This thread has been deleted. Comments and edits cannot be made.</b>
+            {% else %}
+                <b class="deleted_thread error-banner">This thread has been deleted by the administrator. Comments and edits cannot be made.</b>
+            {% endif %}
+            
+            <div class="votesection">
+                
+                <div class="commentnumber">
+                    <img src="{{ url_for('static', filename='assets/comment.png') }}" alt="Comments" class="voteimg">
+                    <p>{{question.comments}}</p>
+                </div>
+                <div class="voteblock">
+                    
+                    <button id="threadUpvote" onclick="threadVote(1,{{question.id}})" class="voteButton {% if user_vote == 1 %} selected {% endif %}">
+                        <img src="{{ url_for('static', filename='assets/thumbs-up(1).png') }}" alt="Upvote" class="voteimg">
+                    </button>
+                    
+                    <p id="threadScore">{{question.score}}</p>
+                    
+                    <button id="threadDownvote" onclick="threadVote(-1,{{question.id}})" class="voteButton {% if user_vote == -1 %} selected {% endif %}">
+                        <img src="{{ url_for('static', filename='assets/negative-vote.png') }}" alt="Downvote" class="voteimg">
+                    </button>
+                </div>
+                
+                {% if question.deleted == 0 %}
+                    {% if question.user_id == session.get('user_id') or session['role'] == 'admin' %}
+                        <button class="btn-submit" onclick=editQuestion()>Edit</button>
+                    {% endif %}
+                    {% if session['role'] == 'admin' or question.user_id == session.get('user_id') %}
+                    <form action="/forum/thread/{{question.id}}?page={{page}}" method="POST">
+                        <input type="hidden" value="{{question.id}}" name="question_id" />
+                        <input type="hidden" value="{{question.user_id}}" name="author_id" />
+                        <button class="btn-submit" name="deleteQuestion">Delete</button>
+                    </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="actualVotesection">
+                
+            </div>
+        </div>
+        
+        {% if (question.user_id == session.get('user_id') or session['role'] == 'admin') and question.deleted == 0 %}
+        <div class="editQuestion" id="edit_question_form"  style="display:none">
+            <form class="make_a_comment" action="/forum/thread/{{question.id}}?page={{page}}" method="POST">
+                <h3>Edit Question</h3>
+                <div class="form-divider">
+                    <input type="text" name="title" placeholder="Enter Title Here..." value="{{question.title}}" required>
+                </div>
+                <div class="form-divider">
+                    <textarea id="textinput" name="body" placeholder="Explain in detail here...">{{question.body}}</textarea>
+                </div>
+                <button type="submit" class="btn-submit"  name="editQuestion">Edit Post</button>
+            </form>
+        </div>
+            
+        {% endif %}
+        {% if question.deleted == 0 %}
+        <form class="make_a_comment" action="/forum/thread/{{question.id}}?page={{page}}" method="POST">
+            <div class="form-divider">
+                <textarea id="textinput" name="body" placeholder="Type your comment here..." required></textarea>
+            </div>
+            <button type="submit" class="btn-submit" name="postComment">Post</button>
+        </form>
+        {% endif %}
+    </div>
+    <h2>Comments:</h2>
+    <div class="comments_section">
+        {% for reply in replies %}
+        {% if reply.deleted == 0 %}
+            <div class="reply_body" id="view_comment_{{reply.post_id}}">
+                <a class="userarea" href="/profile/{{reply.author_id}}">
+                    <img src="{{ url_for('static', filename=reply.avatar) }}" alt="{{reply.author.username}}">
+                    <h4 class="username">{{reply.author.username}}</h4>
+                </a>
+                <div class="bodyarea">
+                    <p>{{reply.body}}</p>
+                    <div class="date">
+                        {% if reply.author_id == session.get('user_id') %}
+                            <button class="btn-submit" onclick="toggleIds(['view_comment_{{reply.post_id}}','edit_comment_form_{{reply.post_id}}'])">Edit</button>
+                        {% endif %}
+                        {% if session['role'] == 'admin' or reply.author_id == session.get('user_id') %}
+                        <form action="/forum/thread/{{question.id}}?page={{page}}" method="POST">
+                            <input type="hidden" value="{{reply.post_id}}" name="comment_id" />
+                            <input type="hidden" value="{{reply.author_id}}" name="author_id" />
+                            <button class="btn-submit" name="deleteComment">Delete</button>
+                        
+                        {% endif %}
+                        <p>{{reply.date}}</p>
+                        
+
+                    </div>
+
+                </div>
+                </form>
+                <div class="voteblock voteblockhor">
+                    
+                    <button id="commentUpvote_{{reply.post_id}}" onclick="commentVote(1,{{reply.post_id}})" class="voteButton {% if reply.your_vote == 1 %} selected {% endif %}">
+                        <img class="commentimage" src="{{ url_for('static', filename='assets/thumbs-up(1).png') }}" alt="Upvote" class="voteimg">
+                    </button>
+                    
+                    <p id="commentScore_{{reply.post_id}}">{{reply.score}}</p>
+                    
+                    <button id="commentDownvote_{{reply.post_id}}" onclick="commentVote(-1,{{reply.post_id}})" class="voteButton {% if reply.your_vote == -1 %} selected {% endif %}">
+                        <img class="commentimage" src="{{ url_for('static', filename='assets/negative-vote.png') }}" alt="Downvote" class="voteimg">
+                    </button>
+                </div>
+                
+                
+                
+            </div>
+            {% if reply.author_id == session.get('user_id') %}
+            <div class="reply_body" id="edit_comment_form_{{reply.post_id}}" style="display:none">
+                <a class="userarea" href="/profile/{{reply.author_id}}">
+                    <img src="{{ url_for('static', filename=reply.avatar) }}" alt="{{reply.author.username}}">
+                    <h4 class="username">{{reply.author.username}}</h4>
+                </a>
+                <form class="bodyarea" action="/forum/thread/{{question.id}}?page={{page}}" method="POST">
+                        <textarea id="textinput" name="body" placeholder="Edit your comment here...">{{reply.body}}</textarea>
+                                                <!-- possible scurity risk, but for now its how I can get the comment id -->
+                            <input type="hidden" value="{{reply.post_id}}" name="comment_id" />
+                        <div class="date">
+                            {% if reply.author_id == session.get('user_id') %}
+                                
+                                <button type="button" class="btn-submit" onclick="toggleIds(['view_comment_{{reply.post_id}}','edit_comment_form_{{reply.post_id}}'])">Cancel</button>
+                                <button type="submit" class="btn-submit"  name="editComment">Edit Comment</button>
+                            {% endif %}
+                            <p>{{reply.date}}</p>
+                            
+
+                        </div>
+                    </form>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="reply_body error-banner" >
+                {% if reply.deleted == 2 %}
+                    <b>This post has been deleted by the Administrator.</b>
+                {% else %}
+                    <b>This post has been deleted.</b>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+    {% if pages > 1 %}
+    <div class ="paginator">
+        {% if page > 1 %}
+        <a class = "page_button arrow_button" href="/forum/thread/{{question.id}}?page={{page-1}}">
+            &lt;
+        </a>
+        <a class = "page_button" href="/forum/thread/{{question.id}}?page=1">
+            1
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &lt;
+            </div>
+         {% endif %}
+         <!-- custom pagenumber -->
+          {% if page-3 > 1 %}
+            <div class="show_input">
+                <form id="custom_page_input1" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('1')" class="page_button">
+                    ...
+                </button>
+            </div>
+          {% endif %}
+        <!-- 2 pages prior -->
+         {%for i in range(page-2,page)%}
+            {% if i > 1%}
+                <a class = "page_button" href="/forum/thread/{{question.id}}?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+
+        <a class = "page_button active" href="/forum/thread/{{question.id}}?page={{page}}">
+            {{page}}
+        </a>
+        <!-- 2 pages after -->
+        {%for i in range(page+1,page+3)%}
+            {% if i < pages%}
+                <a class = "page_button" href="/forum/thread/{{question.id}}?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+         <!-- custom pagenumber -->
+        {% if page+3 < pages %}
+            <div class="show_input">
+                <form id="custom_page_input2" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('2')" class="page_button">
+                    ...
+                </button>
+            </div>
+            
+          {% endif %}
+
+        {% if page < pages %}
+        <a class = "page_button" href="/forum/thread/{{question.id}}?page={{pages}}">
+            {{pages}}
+        </a>
+        <a class = "page_button arrow_button" href="/forum/thread/{{question.id}}?page={{page+1}}">
+            &gt;
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &gt;
+            </div>
+         {% endif %}
+
+    </div>
+    {% endif %}
+    <!-- END PAGINATOR -->
+
+<!-- END -->
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/forum_thread.js') }}"></script>
+<script src="{{ url_for('static', filename='js/custompagenumber.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vote.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='js/forum_thread.js') }}"></script> -->
+<script>
+    function toggleSearch() {
+        document.getElementById("search-overlay").classList.add("active");}
+
+    function closeSearch() {
+        document.getElementById("search-overlay").classList.remove("active");}
+</script>
+</body>
+</html>

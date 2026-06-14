@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/payment.css') }}">
+
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body class=payment-body>
+
+<nav>
+    <a href="/" class="nav-logo">
+        <div class="nav-logo-circle">
+            <img src="{{ url_for('static', filename='assets/food_computing_logo.jpg') }}" alt="logo">
+        </div>
+        Food Computing Academy
+    </a>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about_team">About us</a></li>
+        <li><a href="/programs">Programs</a></li>
+        <li><a href="/news">News ▾</a></li>
+    </ul>
+    
+    <div class="nav-right">
+        {% if session.get('user_id') %}
+            
+                <div class="dropdown">
+        <span class = "dropdown-start" style="color: var(--muted); font-size: 13px;">{{ session.get('user_email') }}</span>
+        <div class="dropdown-content">
+            <a href="/profile/{{ session.get('user_id') }}" class="dropdown_entry">Profile</a>
+            <a href="/logout" class="dropdown_entry">Log out</a>
+        </div>
+    </div>
+        {% else %}
+            <a href="/login" class="btn-signin">Sign in</a>
+        {% endif %}
+        <a href="/contact_us" class="btn-signin">Contact us</a>
+    </div>
+</nav>
+{% include 'popups.html' %}
+
+<section class="payment-page">
+
+    {% if error %}
+        <p class="error" style="text-align:center;">{{ error }}</p>
+    {% endif %}
+
+    <div class="payment-grid">
+
+        <!-- LEFT CARD:  Details -->
+        <div class="payment-card">
+            <h2>Your Details</h2>
+            <form id="details-form">
+                <input type="hidden" name="delivery_type" value="digital">
+                <input type="hidden" name="address_type" value="billing">
+                <input type="hidden" name="module_id" value="{{ module_id if module_id else '' }}">
+
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input id="first_name" type="text" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input id="last_name" type="text" name="last_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" type="text" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Billing Address</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+
+                <button type="submit" id="continue-button" class="btn-submit">
+                    Continue to Payment →
+                </button>
+            </form>
+        </div>
+
+        <!-- RIGHT CARD: Stripe Payment Form-->
+        <div class="payment-card" id="payment-card">
+            <h2>Secure Payment</h2>
+            <div id="payment-card-locked">
+                <p class="payment-locked-msg">please fill in details first</p>
+            </div>
+            <div id="payment-element-wrapper" class="hidden">
+                <div id="payment-element"></div>
+                <button id="pay-button" class="btn-submit">Pay Now</button>
+                <p id="payment-message" class="error"></p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    window.STRIPE_PUBLIC_KEY = "{{ stripe_public_key }}";
+</script>
+<script src="{{ url_for('static', filename='js/payment_gateway.js') }}"></script>
+
+</body>
+</html>

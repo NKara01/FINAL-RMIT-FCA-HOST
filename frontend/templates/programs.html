@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/programs.css') }}">
+</head>
+
+
+<body class="programbody">
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<div class="mainsection">
+<div class="programdisplaysection">
+        <img src="/frontend/assets/consultation.jpg" class="programsimg">
+    </div>
+
+    <div class="programdescription">
+        <h1>What we offer</h1>
+        
+        <H1>here at FCA</H1>
+<br>
+        <p>We offer extensive insight and services regarding our research </p>
+        <br><a class="btn-primary" href="/contact_us"> Contact Us </a>
+    </div>
+
+
+    
+
+</div>
+
+    <div class="mainsection">
+        <div class="programcategory">
+        <h1 id="title"> What we offer...</h1>
+        <br>
+        <p id="description">Here at the food computing academy we offer a variety of services. We specialise in 
+            providing education to everyone regarding food safety, food microbiology research and education worldwide. 
+            We, as an organisation publish events, research and news everything food safety, biology and service related!
+            Any inquiries - refer to the contact us page and we are excited to help provide education worldwide. 
+
+
+        </p>
+        <p id="description">            <br> </p>
+
+        <p id="description2">At the Food Computing Academy, our programs are designed and led by researchers and 
+    industry professionals who are passionate about bridging the gap between science and everyday understanding. 
+    Whether you're a student, educator, or simply curious about what's on your plate - there's a place for you here.
+</p>
+
+        </div>
+
+
+    <div class="programdisplaycategory">
+        <ul class="buttonlist">
+            <li><button class="categorybutton active" onclick="catergorybutton(1)" >Training</button></li>
+            <li><button class="categorybutton" onclick="catergorybutton(2)" >Resources</button></li>
+            <li><button class="categorybutton" onclick="catergorybutton(3)" >Research</button></li>
+            <li><button class="categorybutton" onclick="catergorybutton(4)" >Education</button></li>
+        </ul>
+    </div>
+
+    </div>
+
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/programs.js') }}"></script>
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/about_us.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{module_title}} Complete | Food Computing Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/module_view.css') }}">
+</head>
+<body>
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+<h1>{{ module_title }}</h1>
+<div class="module_view">
+    <div class="module_information">
+        <h2>🎉 Congratulations!</h2>
+        <p>You have completed this module. Well done on finishing all the parts and quizzes.</p>
+    </div>
+    <div class="purchase_sidebar">
+        <div class="your_module_section">
+            <h5>Final Score</h5>
+            <p>{{ progress | round(1) }}%</p>
+        </div>
+        <div class="your_module_section">
+            <h5>Progress</h5>
+            <div class="progress_bar">
+                <div class="progress_bar_fill" id="progress_bar" name="{{ progress }}">{{ progress | round(1) }}%</div>
+                {{ progress | round(1) }}%
+            </div>
+        </div>
+        <a class="btn-submit" href="/modules/your_modules">Your Modules</a>
+        <a class="btn-submit" href="/modules">Browse Modules</a>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/progress_bar.js') }}"></script>
+<script>
+    function toggleSearch() {
+        document.getElementById("search-overlay").classList.add("active");}
+    function closeSearch() {
+        document.getElementById("search-overlay").classList.remove("active");}
+</script>
+</body>
+</html>

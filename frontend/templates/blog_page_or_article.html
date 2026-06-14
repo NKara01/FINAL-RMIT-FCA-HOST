@@ -1,0 +1,290 @@
+<!-- Its a blog (comments = yes) or an article (comments = no) -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{article.title}} | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/comments.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='styles/article.css') }}">
+</head>
+<body>
+
+    {% include 'nav.html' %}
+    {% include 'popups.html' %}
+
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+    <section class="article_title_section">
+        <img src="{{ url_for('static', filename=article.image_url) }}" alt="no img found :(">
+        <div class="article_title">
+            <h1>{{article.title}}</h1>
+            <p>Author: {{article.author}}</p>
+            <p>{{article.date}}</p>
+        </div>
+        
+    </section>
+
+    <section class="article_body">
+        <div class="bodytext">
+            <p id="body_text">{{article.body}}</p>
+            <p class="details">Author: {{article.author}}</p>
+            <p class="details">{{article.date}}</p>
+            {% if article.user_id == session.get('user_id') and session['role'] == 'admin' %}
+                <div class="article_buttons">
+                    <button class="btn-submit" onclick="toggleIds(['body_text','edit_article_form'])">Edit</button>
+                    <form action="/blogs/article/{{article.id}}?page={{page}}" method="POST">
+                        <button class="btn-submit" name="deleteArticle">Delete</button>
+                    </form>
+                </div>
+                
+                <form id="edit_article_form" style="display:none" class="make_a_comment edit_article" action="/blogs/article/{{article.id}}?page={{page}}" method="POST" enctype="multipart/form-data">
+                    {% if article.enable_comments == 1 %}
+                    <h3>Edit Blog</h3>
+                    {% else %}
+                    <h3>Edit Article</h3>
+                    {% endif %}
+                    <div class="form-divider">
+                        
+                        <label for="title">Title</label>
+                        <input type="text" name="title" placeholder="Enter Title Here..." value="{{article.title}}" required>
+                    </div>
+                    <div class="form-divider">
+                        
+                        <label for="company">Company</label>
+                        <input type="text" name="company" placeholder="Enter Company Here..." value="{{article.company}}" required>
+                    </div>
+                    <div class="form-divider">
+                        
+                        <label for="body">Text</label>
+                        <textarea id="textinput" name="body" placeholder="Add information here...">{{article.body}}</textarea>
+                    </div>
+                    <div class="image_container">
+                        <input type="hidden" value="{{article.image_url}}" name="old_image" />
+                        <!-- https://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded -->
+                        <img id="blah" src="#" alt="Your new article image will display here" />
+                        <label for="file">Article Image</label>
+                        <input multiple accept="image/*" type="file" id="imgInp" name="file" />  
+                    </div>
+                    <button type="submit" class="btn-submit button2"  name="editArticle">Edit Article</button>
+                </form>
+             {% endif %}
+
+
+            {% if article.enable_comments == 1 %}
+            <div class="blog_comments">
+                <h3>Comments</h3>
+                {% if session.get('user_id') %}
+                    <form class="make_a_comment" action="/blogs/article/{{article.id}}?page={{page}}" method="POST">
+                        <div class="form-divider">
+                            <textarea id="textinput" name="body" placeholder="Type your comment here..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit button2" name="postComment">Post</button>
+                    </form>
+                {% else %}
+                    Login to comment on this Blog
+                    <a href="/login" class="btn-submit button2">Login</a>
+                {% endif %}
+                <div class="comments_section">
+                {% for comment in comments %}
+                    {% if comment.deleted == 0 %}
+                        <div class="reply_body" id="view_comment_{{comment.post_id}}">
+                            <a class="userarea" href="/profile/{{comment.author_id}}">
+                                <img src="{{ url_for('static', filename=comment.avatar) }}" alt="{{comment.author.username}}">
+                                <h4 class="username">{{comment.author.username}}</h4>
+                            </a>
+                            <div class="bodyarea">
+                                <p>{{comment.body}}</p>
+                                <div class="date">
+                                    {% if comment.author_id == session.get('user_id') %}
+                                        <button class="btn-submit" onclick="toggleIds(['view_comment_{{comment.post_id}}','edit_comment_form_{{comment.post_id}}'])">Edit</button>
+                                    {% endif %}
+                                    {% if session['role'] == 'admin' or comment.author_id == session.get('user_id') %}
+                                        <form action="/blogs/article/{{article.id}}?page={{page}}" method="POST">
+                                            <input type="hidden" value="{{comment.post_id}}" name="comment_id" />
+                                            <input type="hidden" value="{{comment.author_id}}" name="author_id" />
+                                            <button class="btn-submit" name="deleteComment">Delete</button>
+                                        </form>
+                                    {% endif %}
+                                    <p>{{comment.date}}</p>
+                                    
+
+                                </div>
+
+                            </div>
+                            
+                            
+                            
+                        </div>
+                        {% if comment.author_id == session.get('user_id') %}
+                        <div class="reply_body" id="edit_comment_form_{{comment.post_id}}" style="display:none">
+                            <a class="userarea" href="/profile/{{comment.author_id}}">
+                                <img src="{{ url_for('static', filename=comment.avatar) }}" alt="{{comment.author.username}}">
+                                <h4 class="username">{{comment.author.username}}</h4>
+                            </a>
+                            <form class="bodyarea" action="/blogs/article/{{article.id}}?page={{page}}" method="POST">
+                                    <textarea id="textinput" name="body" placeholder="Edit your comment here...">{{comment.body}}</textarea>
+                                                            <!-- possible scurity risk, but for now its how I can get the comment id -->
+                                        <input type="hidden" value="{{comment.post_id}}" name="comment_id" />
+                                    <div class="date">
+                                        {% if comment.author_id == session.get('user_id') %}
+                                            
+                                            <button type="button" class="btn-submit" onclick="toggleIds(['view_comment_{{comment.post_id}}','edit_comment_form_{{comment.post_id}}'])">Cancel</button>
+                                            <button type="submit" class="btn-submit"  name="editComment">Edit Comment</button>
+                                        {% endif %}
+                                        <p>{{comment.date}}</p>
+                                        
+
+                                    </div>
+                                </form>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        {% if comment.deleted == 2 %}
+                        <div class="reply_body error-banner">
+                            <b>This post has been deleted by the Administrator.</b>
+                        </div>
+                            
+                        {% else %}
+                        <div class="reply_body error-banner">
+                            <b>This post has been deleted.</b>
+                        </div>
+                            
+                            
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if pages > 1 %}
+    <div class ="paginator">
+        {% if page > 1 %}
+        <a class = "page_button arrow_button" href="/blogs/article/{{article.id}}?page={{page-1}}">
+            &lt;
+        </a>
+        <a class = "page_button" href="/blogs/article/{{article.id}}?page=1">
+            1
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &lt;
+            </div>
+         {% endif %}
+         <!-- custom pagenumber -->
+          {% if page-3 > 1 %}
+            <div class="show_input">
+                <form id="custom_page_input1" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('1')" class="page_button">
+                    ...
+                </button>
+            </div>
+          {% endif %}
+        <!-- 2 pages prior -->
+         {%for i in range(page-2,page)%}
+            {% if i > 1%}
+                <a class = "page_button" href="/blogs/article/{{article.id}}?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+
+        <a class = "page_button active" href="/blogs/article/{{article.id}}?page={{page}}">
+            {{page}}
+        </a>
+        <!-- 2 pages after -->
+        {%for i in range(page+1,page+3)%}
+            {% if i < pages%}
+                <a class = "page_button" href="/blogs/article/{{article.id}}?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+         <!-- custom pagenumber -->
+        {% if page+3 < pages %}
+            <div class="show_input">
+                <form id="custom_page_input2" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('2')" class="page_button">
+                    ...
+                </button>
+            </div>
+            
+          {% endif %}
+
+        {% if page < pages %}
+        <a class = "page_button" href="/blogs/article/{{article.id}}?page={{pages}}">
+            {{pages}}
+        </a>
+        <a class = "page_button arrow_button" href="/blogs/article/{{article.id}}?page={{page+1}}">
+            &gt;
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &gt;
+            </div>
+         {% endif %}
+
+    </div>
+    {% endif %}
+    <!-- END PAGINATOR -->
+
+        </div>
+
+<aside class="events-sidebar">
+<h2>Upcoming Events</h2>
+
+<div class="sidebar-events-list">
+{% for event in events %}
+<a href="/events/{{event.id}}" class="sidebar-event-card">
+        {% if event.image %}
+                <img src="{{ event.image }}" alt="{{ event.title }}">
+        {% else %}
+            <img src="/frontend/assets/placeholder.png" alt="Event">
+        {% endif %}
+        <div class="sidebar-event-content">
+        <h3>{{ event.title }}</h3>
+        <div class="news-list-meta">{{ event.date }} | {{ event.time }} AEST</div>
+        {% if event.location %}
+            <div class="news-list-meta" style="margin-top:4px;">{{ event.location }}</div>
+        {% endif %}
+        </div>
+    </a>
+    {% else %}
+        <p style="color:var(--muted); font-size:13px;">No upcoming events.</p>
+    {% endfor %}
+    </div>
+
+    <div class="sidebar-more-wrap">
+        <a href="/events" class="sidebar-more-btn">More....</a>
+    </div>
+</aside>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='js/custompagenumber.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+    <script>
+        function toggleSearch() {
+            document.getElementById("search-overlay").classList.add("active");}
+
+        function closeSearch() {
+            document.getElementById("search-overlay").classList.remove("active");}
+    </script>
+
+</body>
+</html>

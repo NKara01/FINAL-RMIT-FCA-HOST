@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+</head>
+<body>
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+<section class="events-page-hero">
+    <h1>Upcoming Events</h1>
+    <div class="news-feature-text">
+        <p>Find Food Computing Academy events, webinars and community sessions.</p>
+    </div>
+</section>
+
+<style>
+
+
+
+</style>
+
+<section class="news-page-main">
+    <div class="news-left-column">
+        <div class="news-list">
+            {% for event in events %}
+            <a href="/events/{{event.id}}" class="news-list-card" style="grid-template-columns: 210px 1fr;">
+                {% if event.image %}
+                    <img src="{{ event.image }}" alt="{{ event.title }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='assets/placeholder.png') }}" alt="Event placeholder">
+                {% endif %}
+
+                <div class="news-list-content">
+                    <h3>{{ event.title }}</h3>
+                    <div class="news-list-meta">
+                        {{ event.date }}
+                        {% if event.time %} | {{ event.time }} AEST{% endif %}
+                    </div>
+                    {% if event.location %}
+                    <div class="news-list-meta" style="margin-top:4px;">{{ event.location }}</div>
+                    {% endif %}
+                    {% if event.description %}
+                    <p style="margin-top:1rem;">
+                        {{ event.description[:180] }}{% if event.description|length > 180 %}...{% endif %}
+                    </p>
+                    {% endif %}
+                </div>
+            </a>
+            {% else %}
+                <p style="color:var(--muted);">No upcoming events.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

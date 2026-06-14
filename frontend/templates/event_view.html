@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{event.title}}| Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/events.css') }}">
+</head>
+<body>
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <input type="text" placeholder="Search..." id="search-input">
+        <button onclick="closeSearch()">X</button>
+    </div>
+</div>
+
+<section class="event_top">
+    {% if event.image %}
+        <img src="{{ event.image }}" alt="{{ event.title }}">
+    {% else %}
+        <img src="{{ url_for('static', filename='assets/placeholder.png') }}" alt="Event placeholder">
+    {% endif %}
+    <div class="article_title">
+        <h1>{{event.title}}</h1>
+        {% if event.created_by %}
+             <p>Author: {{event.created_by}}</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="news-page-main">
+    <div class="event_body">
+        <p>{{event.description}}</p>
+    </div>
+    <div class="event_details">
+        <h3>Date</h3>
+        <p>{{event.date}}</p>
+        <h3>Time</h3>
+        <p>{{event.time}}</p>
+        {% if event_expired %}
+            <b>This event has already occurred.</b>
+        {% endif %}
+        {% if event.location %}
+            <h3>Location</h3>
+            <p>{{event.location}}</p>
+        {% endif %}
+    </div>
+</section>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

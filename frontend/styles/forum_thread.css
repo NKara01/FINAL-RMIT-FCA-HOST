@@ -1,0 +1,220 @@
+:root {
+    --darker: #121212;
+    --greyer: #D9D9D9;
+}
+body{
+    background: #D9D9D9;
+}
+.full_area{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin:3rem;
+}
+.full_area .post_title{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 3rem;
+    color: var(--darker);
+    gap:1rem;
+}
+
+.topsection  {
+    width: calc(90% - 1rem);
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.image {
+    width: 10%;
+}
+.image img {
+        width:100%;
+
+    object-fit: cover;
+    height:auto;
+    aspect-ratio: 1; /* will make width equal to height (500px container) */
+}
+.topsection .titlearea{
+    width:100%;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap:1rem;
+}
+.topsection h4{
+    width:100%;
+    margin-top:3rem;
+}
+.topsection .paragraph{
+    width:100%;
+    line-height: 2;
+}
+.topsection .votesection{
+    width:100%;
+}
+.post_title .make_a_comment{
+    width:100%;
+}
+
+
+.titlearea h1{
+    font-size:250%;
+}
+.titlearea .date{
+    font-size: 120%;
+    margin-left:auto;
+    margin-right:0;
+    color: gray;
+}
+
+.votesection {
+    margin-left:auto;
+    margin-right:0;
+    display:flex;
+    flex-direction: row-reverse;
+    flex-wrap:wrap;
+    width:60%;
+    gap:50px;
+}
+.votesection button {
+    width: 10%;
+    max-height: 40px;
+}
+.votesection form {
+    width: 10%;
+}
+.votesection form button {
+    width: 100%;
+}
+.votesection .commentnumber{
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    gap:10px;
+    font-size: 25px;
+}
+.editQuestion{
+    width: 100%
+}
+.make_a_comment{
+     display: flex;
+    flex-direction: column;
+  justify-content: center;
+  color:var(--navy);
+  gap:20px;
+  margin-top: 2rem;
+}
+
+h2{
+    font-size: 200%;
+    margin: 1.5rem;
+    color:var(--darker);
+}
+
+.make_a_comment input,
+.make_a_comment textarea,
+.make_a_comment select {
+    width: 100%;
+    border: 1px solid var(--darker);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--darker);
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    
+}
+.make_a_comment textarea{
+    resize:none;
+    min-height:100px;
+}
+.make_a_comment button{
+    width: 10%;
+    min-width: 150px;
+    margin-left:auto;
+    margin-right:0;
+}
+
+/* deleted */
+
+.error-banner {
+    background: rgba(255, 210, 210, 1)!important;
+    border: 1px solid rgba(255, 49, 49, 1)!important;
+    border-radius: 8px;
+    padding: 0.75rem 1.2rem;
+    font-size: 13px;
+    color: #e94344!important;
+    margin-bottom: 1.5rem;
+    width:100%;
+}
+.voteblock{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.voteblock.voteblockhor{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap:1rem;
+    width:50px;
+}
+.voteblock.voteblockhor p{
+    font-size: 36px;
+    text-align: center;
+}
+.voteblock .voteButton{
+    display:relative;
+    width: 35px;
+    height: 35px;
+    padding:0;
+    background-color: rgba(255, 210, 210, 0)!important;
+    border-radius: 0;
+    border-style: none;
+    border: none;
+    color:none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.voteblock img{
+    display:absolute;
+    left:0;
+    top:0;
+
+    transition: .2s ease;
+    filter: grayscale(100%) brightness(0%);
+}
+
+.commentimage {
+    width:50px;
+    height:50px;
+    margin:0px;
+}
+
+.voteButton.selected img{
+    filter: grayscale(0%) brightness(75%);
+}
+
+.voteblock img:hover{
+    filter: grayscale(0%) brightness(100%);
+    transition: .2s ease;
+}
+.voteblock img:active{
+    filter: grayscale(0%) brightness(25%);
+    transition: .1s ease;
+}
+.votesection p{
+    display:block;
+    font-size: 35px;
+}
+.votesection img {
+    width: 30px;
+    height: 30px;
+    filter: grayscale(100%) brightness(0%);
+}

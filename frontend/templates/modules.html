@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modules | Food Computing Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/all_modules.css') }}">
+<link rel="stylesheet" href="js/homepage.js">
+</head>
+<body>
+
+<!-- NAV -->
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+<!-- MODULE LISTING APPROXIMATION -->
+ <!-- im just winging it and having something to show in terms of modules -->
+<div class="modules_title">
+
+    <div class="intro_right">
+        
+    </div>
+    
+    <div class="intro_left">
+        <h1>Food Computing Modules</h1>
+    </div>
+    
+    
+    <!-- title subject to change as well -->
+</div>
+ <div class = "module_features">
+    <button class="btn-search">
+        <img src="{{ url_for('static', filename='assets/filter.png') }}" alt="Filter">
+        Filter : A-Z
+        <!-- Stuck at latest for now -->
+    </button>
+    <div class="search-box">
+        <input type="text" placeholder="Search..." id="search-input">
+    </div>
+    {% if session.get('user_id') %}
+    <a class="btn-search" href="/modules/your_modules">Your Modules</a>
+    {% else %}
+    <a class="btn-search" href="/login">Login to view your Modules</a>
+    {% endif %}
+</div>
+
+
+
+<div class="modules_list">
+{% for module in modules %}
+    <div class="module {% if module.not_purchased == 0 %}purchased{% endif %}">
+        {% if module.image_url %}
+            <div class="module_image_wrap">
+                <img class="module_image" src="{{ url_for('static', filename=module.image_url) }}">
+            </div>
+        {% endif %}
+        <h3>{{ module.title }}</h3>
+        <p>{{ module.description[:100] }}{% if module.description|length > 100 %}…{% endif %}</p>
+        <div class="actions">
+            <a class="btn-submit" href="/modules/view/{{module.id}}">Details</a>
+            {% if module.not_purchased == 1 %}
+                {% if session.get('user_id') %}
+                <form action="/modules/view/{{module.id}}" method="POST">
+                    <button class="btn-submit" href="/modules/view/{{module.id}}">Buy Now</button>
+                </form>
+                {% else %}
+                <a class="btn-submit" href="/login">Buy Now</a>
+                {% endif %}
+                
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    {% if pages > 1 %}
+    <div class ="paginator">
+        {% if page > 1 %}
+        <a class = "page_button arrow_button" href="/modules?page={{page-1}}">
+            &lt;
+        </a>
+        <a class = "page_button" href="/modules?page=1">
+            1
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &lt;
+            </div>
+         {% endif %}
+         <!-- custom pagenumber -->
+          {% if page-3 > 1 %}
+            <div class="show_input">
+                <form id="custom_page_input1" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('1')" class="page_button">
+                    ...
+                </button>
+            </div>
+          {% endif %}
+        <!-- 2 pages prior -->
+         {%for i in range(page-2,page)%}
+            {% if i > 1%}
+                <a class = "page_button" href="/modules?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+
+        <a class = "page_button active" href="/modules?page={{page}}">
+            {{page}}
+        </a>
+        <!-- 2 pages after -->
+        {%for i in range(page+1,page+3)%}
+            {% if i < pages%}
+                <a class = "page_button" href="/modules?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+         <!-- custom pagenumber -->
+        {% if page+3 < pages %}
+            <div class="show_input">
+                <form id="custom_page_input2" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('2')" class="page_button">
+                    ...
+                </button>
+            </div>
+            
+          {% endif %}
+
+        {% if page < pages %}
+        <a class = "page_button" href="/modules?page={{pages}}">
+            {{pages}}
+        </a>
+        <a class = "page_button arrow_button" href="/modules?page={{page+1}}">
+            &gt;
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &gt;
+            </div>
+         {% endif %}
+
+    </div>
+    {% endif %}
+    <!-- END PAGINATOR -->
+ 
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/price_format.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+<script>
+    function toggleSearch() {
+        document.getElementById("search-overlay").classList.add("active");}
+
+    function closeSearch() {
+        document.getElementById("search-overlay").classList.remove("active");}
+</script>
+</body>
+</html>

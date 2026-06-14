@@ -1,0 +1,13 @@
+<div class="popup_section">
+    {% with popup_messages = get_flashed_messages(with_categories=true)%}
+        {% if popup_messages %}
+            {% for i in range(popup_messages|length) %}
+                <div class="popup_bar {{popup_messages[i][0]}}" id = "popup_{{i}}">
+                    <p>{{popup_messages[i][1]}}</p>
+                    <button class="closeButton" onclick="closePopup('popup_{{i}}')">✕</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {%endwith%}
+</div>
+<script src="{{ url_for('static', filename='js/closepopup.js') }}"></script>

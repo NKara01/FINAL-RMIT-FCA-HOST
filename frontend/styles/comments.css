@@ -1,0 +1,93 @@
+/* REPLIES */
+.comments_section{
+        display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.comments_section .reply_body{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 2rem;
+    color: var(--darker);
+    box-shadow: 0px 5px 20px gray;
+    gap: 1rem;
+}
+
+.comments_section .reply_body .userarea{
+    width:150px;
+    text-decoration: none;
+    color: var(--darker);
+}
+
+.comments_section .reply_body .bodyarea{
+    width:calc( 95% - 200px);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.userarea img{
+    width:100px;
+
+    object-fit: cover;
+    height:100px;
+}
+
+ .reply_body .bodyarea h4{
+    font-size: 100%;
+    width:100%;
+}
+ .reply_body .bodyarea p{
+    font-size: 100%;
+    width:100%;
+}
+
+.bodyarea textarea{
+    width: 100%;
+    min-height: 200px;
+    background: rgb(255, 255, 255);
+    border: 1px solid var(--navy);
+    border-radius: 8px;
+    padding: 10px 14px;
+     margin-top:10px;
+    color: var(--navy);
+    font-family: 'Sora', sans-serif;
+    font-size: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    color:var(--navy);
+    field-sizing: content; /* used to be `form-sizing` but changed to this */
+}
+
+.bodyarea .date{
+    font-size: 100%;
+    color:gray;
+    width:100%;
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: right;
+    margin-top: 0px!important;
+}
+.bodyarea .date p{
+    width: 100%;
+    margin-left: auto;
+        margin-bottom: 0!important;
+        text-align:right;
+            color:gray;
+            justify-content: right;
+}
+.bodyarea .date button{
+    width: 200px;
+    max-height: 40px;
+    margin-top: 0;
+    margin-bottom: 10px!important;
+    margin-left: 20px;
+}

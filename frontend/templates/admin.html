@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+</head>
+<body>
+
+<!-- <nav>
+
+</nav> -->
+
+<!-- NAV -->
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<div class="admin-wrap">
+
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <span class="admin-tag">Administrator</span>
+    </div>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+        <button class="admin-tab {% if active_tab == 'events' %}active{% endif %}" onclick="switchTab('events', this)">Events</button>
+        <button class="admin-tab {% if active_tab == 'news' %}active{% endif %}" onclick="switchTab('news', this)">News</button>
+        <button class="admin-tab {% if active_tab == 'users' %}active{% endif %}" onclick="switchTab('users', this)">Users</button>
+        <a href="/admin/create_module" class="admin-tab">Create Module</a>
+    </div>
+
+    <!-- EVENTS TAB -->
+    <div class="tab-panel {% if active_tab == 'events' %}active{% endif %}" id="tab-events">
+
+        {% if success and active_tab == 'events' %}<div class="success-banner" style="display:block;">✓ {{ success }}</div>{% endif %}
+        {% if error and active_tab == 'events' %}<div class="error-banner" style="display:block;">{{ error }}</div>{% endif %}
+
+        <div class="form-container" style="max-width:100%; min-width:unset;">
+            <h2>Create New Event</h2>
+            <form method="POST" action="/admin" enctype="multipart/form-data">
+                <input type="hidden" name="form_type" value="event">
+                <div class="form-group">
+                <label>Event Title</label>
+                <input type="text" name="title" placeholder="Conference, webinar, workshop…">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date">
+            </div>
+                <div class="form-group">
+                    <label>Time (AEST)</label>
+                    <input type="time" name="time">
+                    </div>
+                </div>
+            <div class="form-group">
+                <label>Location / Link</label>
+                <input type="text" name="location" placeholder="Zoom link or physical venue">
+            </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="desc" placeholder="What will happen at this event?"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Event Image <span style="color:var(--muted);font-size:11px;">(optional)</span></label>
+                <div class="file-upload-box" onclick="document.getElementById('ev-image').click()">
+                <div class="file-upload-icon">TODO: Folder icon image href</div>
+                <div class="file-upload-label" id="file-label">Click to upload image</div>
+                <div class="file-upload-hint">PNG or JPG files only</div>
+                <input type="file" id="ev-image" name="image" accept="image/*" onchange="updateFileLabel(this)">
+            </div>
+        </div>
+        <button type="submit" class="btn-submit">Create Event</button>
+        </form>
+    </div>
+    </div>
+
+    <!-- NEWS TAB -->
+    <div class="tab-panel {% if active_tab == 'news' %}active{% endif %}" id="tab-news">
+        <div class="form-container" style="max-width:100%; min-width:unset;">
+            <h2>Create an Article</h2>
+            <form method="POST" action="/admin/create_news"  enctype="multipart/form-data">
+                <!-- RADIO BUTTONS -->
+                 <!-- Blog (Enable Comments), Article, News (logged in only) -->
+                <div class="form-group radio_group">
+                    <div class="container_radio">
+                        <input type="radio" id="type_article" name="type_article" value="article" checked>
+                        <div class="radio_label">Article</div>
+                    </div>
+                    
+                     <div class="container_radio">
+                        <input type="radio" id="type_blog" name="type_article" value="blog">
+                        <div class="radio_label">Blog (Enables Comments)</div>
+                    </div>
+                     <div class="container_radio">
+                        <input type="radio" id="type_news" name="type_article" value="news_exclusive">
+                        <div class="radio_label">News (Requires login)</div>
+                    </div>
+                    
+                </div>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Upload Article Image</label>
+                    <div class="image_container">
+                        <!-- https://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded -->
+                        <img id="blah" src="#" alt="The article image will display here." />
+                        <input multiple accept="image/*" type="file" id="imgInp" name="file" />  
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Body</label>
+                    <textarea name="body" rows="8" placeholder="Write the article…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Company / Source (optional)</label>
+                    <input type="text" name="company">
+                </div>
+                <button type="submit" class="btn-submit">Publish Article</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- USERS TAB -->
+    <div class="tab-panel {% if active_tab == 'users' %}active{% endif %}" id="tab-users">
+
+    {% if success and active_tab == 'users' %}<div class="success-banner" style="display:block;">✓ {{ success }}</div>{% endif %}
+    {% if error and active_tab == 'users' %}<div class="error-banner" style="display:block;">{{ error }}</div>{% endif %}
+
+    <div class="form-container" style="max-width:100%; min-width:unset;">
+        <h2>User Management</h2>
+
+        <form method="GET" action="/admin" class="users-search-row">
+                <input type="hidden" name="tab" value="users">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by name, email, or ID…">
+            <button type="submit" class="btn-submit">Search</button>
+        {% if query %}
+            <a href="/admin?tab=users" class="users-clear-btn">Clear</a>
+        {% endif %}
+    </form>
+
+    <p class="users-count">{{ users|length }} user{{ 's' if users|length != 1 else '' }} found</p>
+
+    <div style="overflow-x:auto;">
+        <table class="users-table"> <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead> <tbody>
+            {% for u in users %}
+            <tr>
+                <td class="user-id">#{{ u.id }}</td>
+            <td>{{ u.first_name }} {{ u.last_name }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                    <span class="role-badge {{ u.role or 'user' }}">{{ u.role or 'user' }}</span>
+                </td>
+                
+            <td class="action-cell">
+            {% if u.id == current_user_id %}
+                <span class="you-label">You</span>
+            {% else %}
+                {# mirror can_manage_user: masteradmin -> regular+admin, admin -> regular only #}
+                {% set can_act = (current_user_role == 'masteradmin' and u.role in ['regular', 'admin'])
+                            or (current_user_role == 'admin' and u.role == 'regular') %}
+                {% if can_act %}
+                    {% if u.role == 'admin' %}
+                        <form method="POST" action="/admin?tab=users&q={{ query }}" class="action-form">
+                            <input type="hidden" name="form_type" value="role">
+                            <input type="hidden" name="target_id" value="{{ u.id }}">
+                            <input type="hidden" name="new_role" value="regular">
+                            <button type="submit" class="role-btn demote">Remove Admin</button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="/admin?tab=users&q={{ query }}" class="action-form">
+                            <input type="hidden" name="form_type" value="role">
+                            <input type="hidden" name="target_id" value="{{ u.id }}">
+                            <input type="hidden" name="new_role" value="admin">
+                            <button type="submit" class="role-btn promote">Make Admin</button>
+                        </form>
+                    {% endif %}
+                    <form method="POST" action="/admin?tab=users&q={{ query }}" class="action-form"
+                        onsubmit="return confirm('Delete user #{{ u.id }}? This cannot be undone.');">
+                        <input type="hidden" name="form_type" value="delete_user">
+                        <input type="hidden" name="target_id" value="{{ u.id }}">
+                        <button type="submit" class="role-btn demote">Delete</button>
+                    </form>
+                {% else %}
+                            <span class="you-label">—</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                
+            </tr>
+            {% else %}
+            <tr>
+                    <td colspan="5" style="padding:24px; text-align:center; color:var(--muted);">No users found.</td>
+                </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+    function switchTab(name, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + name).classList.add('active');
+        btn.classList.add('active'); }
+
+    function updateFileLabel(input) {
+        const label = document.getElementById('file-label');
+        label.textContent = input.files[0] ? input.files[0].name : 'Click to upload image'; }
+</script>
+
+<script src="{{ url_for('static', filename='js/img_preview_upload.js') }}"></script>
+
+</body>
+</html>

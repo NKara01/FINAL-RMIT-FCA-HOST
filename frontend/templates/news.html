@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent News | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+</head>
+<body>
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+
+    <section class="news-page-hero2">
+        <h1>Recent News</h1>
+
+        <div class="news-feature">
+            <!--  -->
+            <div class="news-feature-image">
+                <img src="{{ url_for('static', filename=featured_news.image_url) }}" alt="placeholder">
+            </div>
+
+            <div class="news-feature-text">
+                <h2>{{featured_news.title}}</h2>
+                <p>
+                    {{ featured_news.body[:200] }}{% if featured_news.body|length > 200 %}…{% endif %}
+                </p>
+                <a href="/news/article/{{featured_news.id}}" class="btn-primary">Learn more</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="news-page-main">
+        <div class="news-page-layout">
+
+            <div class="news-left-column">
+                <div class="news-list">
+                {% for article in news %}
+                <a class="news-list-card" href="/news/article/{{article.id}}">
+                    <img src="{{ url_for('static', filename=article.image_url) }}" alt="no img found :(">
+                    <div class="news-list-content">
+                        
+                        <h3>{{ article.title }}</h3>
+                        <p>{{ article.body[:200] }}{% if article.body|length > 200 %}…{% endif %}</p>
+                        <div class="news-list-meta">
+                            {{ article.created }} &nbsp;&nbsp;
+                            By {{ article.first_name }} {{ article.last_name }}
+                        </div>
+                    </div>
+                </a>
+                {% else %}
+                    <p style="color:var(--muted);">No news articles yet.</p>
+                {% endfor %}
+        </div>
+
+            <div class="news-more-wrap">
+                <a href="/news/archive" class="news-more-btn">More....</a>
+            </div></div>
+
+        <aside class="events-sidebar">
+<h2>Upcoming Events</h2>
+
+<div class="sidebar-events-list">
+{% for event in events %}
+<a href="/events/{{event.id}}" class="sidebar-event-card">
+        {% if event.image %}
+                <img src="{{ event.image }}" alt="{{ event.title }}">
+        {% else %}
+            <img src="/frontend/assets/placeholder.png" alt="Event">
+        {% endif %}
+        <div class="sidebar-event-content">
+        <h3>{{ event.title }}</h3>
+        <div class="news-list-meta">{{ event.date }} | {{ event.time }} AEST</div>
+        {% if event.location %}
+            <div class="news-list-meta" style="margin-top:4px;">{{ event.location }}</div>
+        {% endif %}
+        </div>
+    </a>
+    {% else %}
+        <p style="color:var(--muted); font-size:13px;">No upcoming events.</p>
+    {% endfor %}
+    </div>
+
+    <div class="sidebar-more-wrap">
+        <a href="/events" class="sidebar-more-btn">More....</a>
+    </div>
+</aside>
+        </div>
+    </section>
+
+{% include 'footer.html' %}
+
+
+</body>
+</html>

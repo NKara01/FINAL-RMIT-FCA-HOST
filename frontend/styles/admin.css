@@ -1,0 +1,285 @@
+
+body{
+    background: var(--navy-mid);
+    background: linear-gradient(to left, var(--navy-mid), #290048);
+    background: linear-gradient(to right, var(--navy-mid), #004348);
+    z-index: -1;
+}
+body { display: block; }
+
+.admin-wrap {
+    max-width: 890px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+.admin-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+}
+
+.admin-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: rgba(44, 211, 139, 0.12);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.success-banner {
+    background: rgba(42, 212, 138, 0.12);
+    border: 1px solid rgba(40, 198, 130, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1.2rem;
+    font-size: 13px;
+    color: var(--green);
+    margin-bottom: 1.5rem;
+    display: none;
+}
+
+.error-banner {
+    background: rgba(236, 71, 71, 0.1);
+    border: 1px solid rgba(234, 66, 66, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1.2rem;
+    font-size: 13px;
+    color: #e94344;
+    margin-bottom: 1.5rem;
+    display: none;
+}
+
+/* amin tabs */
+.admin-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+}
+
+.admin-tab {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+}
+
+.admin-tab:hover { color: var(--white); }
+
+.admin-tab.active {
+    color: var(--green);
+    border-bottom-color: var(--green);
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* -- FILE UPLOAD ------------------------------------------- */
+
+.file-upload-box {
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s; }
+.file-upload-box:hover { border-color: var(--green); }
+.file-upload-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.file-upload-label {
+    font-size: 13px;
+    color: var(--white);
+    margin-bottom: 0.25rem; }
+
+.file-upload-hint { font-size: 11px; color: var(--muted); }
+.file-upload-box input[type="file"] { display: none; }
+
+.users-search-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center;}
+
+.users-search-row input { flex: 1; }
+
+.users-search-row .btn-submit {
+    width: auto;
+    padding: 0 24px;}
+
+.users-clear-btn {
+    padding: 0 18px;
+    background: transparent;
+border: 1px solid var(--muted);
+color: var(--muted);
+font-family: 'Sora', sans-serif;
+font-size: 13px;
+    border-radius: 8px;
+cursor: pointer;
+    text-decoration: none;
+display: flex;
+align-items: center;
+}
+
+.users-clear-btn:hover {
+color: var(--white);
+border-color: var(--white); }
+
+.users-count {
+color: var(--muted);
+font-size: 13px;
+margin-bottom: 12px;
+}
+
+.users-table {
+    width: 100%;
+border-collapse: collapse;
+font-size: 14px; }
+
+.users-table th {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.users-table td {
+    padding: 12px 14px;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+vertical-align: middle;}
+
+.users-table tr:hover td { background: rgba(255,255,255,0.02); }
+.users-table .user-id {
+    color: var(--muted);
+    font-size: 12px;}
+
+.role-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;}
+
+.role-badge.admin {
+    background: rgba(52, 211, 153, 0.15);
+    color: #35d49a;}
+
+.role-badge.user {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--muted);}
+
+.role-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;}
+
+.role-btn.promote {
+    background: rgba(52, 211, 153, 0.15);
+    color: #33d69a;}
+
+.role-btn.demote {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f96f6f;}
+
+.role-badge.regular {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--muted);
+}
+.role-badge.masteradmin {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+}
+.role-btn:hover { opacity: 0.8; }
+
+.you-label {
+    color: var(--muted);
+    font-size: 12px;}
+
+.action-form {
+    display: inline-flex;
+    align-items: center;
+}
+
+.action-form + .action-form {
+    margin-left: 8px;
+}
+
+.action-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.users-search-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center; }
+.users-search-row input {
+    height: 44px;
+    box-sizing: border-box;
+    padding: 0 1rem;
+    border-radius: 8px;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    flex: 1; }
+
+
+
+/* Had to enfore with this due to BUTTON NOT ALIGNING  */
+.users-search-row .btn-submit {
+    height: 44px !important;
+    margin-top: 0 !important;
+    align-self: center;
+    box-sizing: border-box;
+    width: auto;
+padding: 0 28px;
+border-radius: 8px;
+font-size: 13px;
+flex-shrink: 0;}
+.sidebar-event-card img {
+width: 80px;
+height: 80px;
+object-fit: cover;
+border-radius: 6px;
+flex-shrink: 0; }
+
+.image_container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.image_container img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    display: block;
+}

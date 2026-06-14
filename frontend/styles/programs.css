@@ -1,0 +1,116 @@
+    @media (max-width: 600px) {
+        .mainsection {
+            -webkit-flex-direction: column;
+            flex-direction: column;
+        }
+
+    }
+
+    .programsimg{
+    max-height: 350px;
+    width: auto;
+    object-fit: cover;
+    border-radius: 20px;
+    margin: 50px;
+   
+}
+
+
+    .mainsection {
+    display: -webkit-flex;
+    display: flex;
+    background-color: none;
+    min-height: 2rem;
+    }
+
+    .programdescription {
+    -webkit-flex: 3;
+    -ms-flex: 3;
+    flex: 3;
+    background-color: none;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;   
+    justify-content: center;  
+    align-items: center;
+    }
+
+    .programdisplaysection {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    background: none;
+    padding: 20px;
+    }
+
+   .programcategory {
+    -webkit-flex: 3;
+    -ms-flex: 3;
+    flex: 3;
+    background-color: #ffffff;
+    padding: 50px 60px;
+    color: black;
+    }
+
+
+    .programcategory1 {
+    -webkit-flex: 3;
+    -ms-flex: 3;
+    flex: 3;
+    background-color: #12ffeb;
+    padding: 50px;
+    }
+
+    .programdisplaycategory {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    
+   
+    }
+.programcategory #title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+#description2 {
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 60ch;
+    margin-top: 1.2rem;
+    color: #222;
+}
+.programcategory #description {
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 60ch;
+}
+    .categorybutton{
+        height: 8rem;
+        width: 100%;
+        border: none;
+        background: #1176b1;
+        transition:0.25s;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .categorybutton:hover{
+        background: #2089c6;
+        transition: 0.25;
+    }
+
+    .categorybutton.active{
+        background: #3aa0db;
+        
+    }
+
+    .buttonlist{
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    .programbody{background-image: linear-gradient(to right ,#0e1c3d ,#12295d , #3745C9);}
+    

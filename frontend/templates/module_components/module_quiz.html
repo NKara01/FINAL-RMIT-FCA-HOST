@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{quiz.title}} | Food Computing Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="js/homepage.js">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/module_view.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/module_part.css') }}">
+</head>
+<body>
+
+<!-- NAV -->
+{% include 'nav.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <input type="text" placeholder="Search..." id="search-input">
+        <button onclick="closeSearch()">✕</button>
+    </div> </div>
+<!-- MAIN CONTENT -->
+ <h1>{{quiz.title}}</h1>
+ <!-- """HOTBAR""" -->
+
+<div class="module_content">
+    <div class="hotbararea">
+        <a class="btn-submit" href="/modules/view/{{quiz.module_id}}">Back to Module</a>
+        <div class="rest">
+                
+                {% for i in range(module_list|length) %}
+                    <div class="part">
+                        <a class="hotbarbutton" href="/modules/module/{{module_list[i].module_id}}/part/{{module_list[i].id}}">{{i+1}}</a>
+                        {% if module_list[i].visited %}
+                            <p class="hotbarlabel passed">{{module_list[i].title}} ✓</p>
+                        {% else %}
+                            <p class="hotbarlabel">{{module_list[i].title}}</p>
+                        {% endif %}
+                    </div>
+                {% if module_list[i].has_quiz %}
+                {% if quiz.part_id and module_list[i].id == quiz.part_id %}
+                    <div class="part active">
+                        <div class="hotbarbutton" href="/modules/module/{{module_list[i].module_id}}/quiz/{{module_list[i].id}}">{{i+1.5}}</div>
+                        {% if module_list[i].quiz_completed %}
+                            <p class="hotbarlabel passed">Quiz - {{module_list[i].quiz_title}} ✓</p>
+                        {% else %}
+                            <p id="quiz_button_current" class="hotbarlabel">Quiz - {{module_list[i].quiz_title}}</p>
+                        {% endif %}
+                    </div>
+                {% else %}
+                     <div class="part">
+                        <a class="hotbarbutton" href="/modules/module/{{module_list[i].module_id}}/quiz/{{module_list[i].id}}">{{i+1.5}}</a>
+                        {% if module_list[i].quiz_completed %}
+                            <p class="hotbarlabel passed">Quiz - {{module_list[i].quiz_title}} ✓</p>
+                        {% else %}
+                            <p class="hotbarlabel">Quiz - {{module_list[i].quiz_title}}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
+               
+                {% endif %}
+                {% endfor %}
+            
+            
+                {% if final_quiz.exists %}
+                    {% if canProceed %}
+                    <div class="part">
+                        <a class="hotbarbutton" href="/modules/module/{{quiz.module_id}}/exam">{{module_list|length + 1}}</a>
+                        {% if final_quiz.quiz_completed %}
+                            <p id="exam_button" class="hotbarlabel passed">Final Exam ✓</p>
+                        {% else %}
+                            <p class="hotbarlabel">Final Exam</p>
+                        {% endif %}
+                        
+                    </div>
+                        
+                    {% else %}
+                    <div class="part inactive dropdownbutton">
+                        <div class="hotbarbutton">{{module_list|length + 1}}</div>
+                        <p class="hotbarlabel">Final Exam</p>
+                         <div class="nextbutton_content">Complete all parts to access the Exam.</div>
+                    </div>
+                        
+                    {% endif %}
+                {% else %}
+
+                {% endif %}
+
+            </div>
+        </div>
+        
+    </div>
+    <div class="content">
+         <!-- QUIZ CONTENT -->
+       
+        <div class="questions_section">
+             <p> Amount of correct answers must be at least {{quiz.pass_percent}}% to complete the quiz.</p>
+            {% for i in range(questions|length) %}
+                <div class="question" id="question_{{i}}_id" name="{{questions[i].id}}">
+                    
+                    {% if questions[i].image_url and  questions[i].image_url != "NIL" %}
+                         <img src="{{ url_for('static', filename=questions[i].image_url) }}">
+                    {% endif %}
+                        <h5 class="question_text">{{i+1}}. {{questions[i].question_text}}</h5>
+                        <div id="question_response_{{questions[i].id}}" class="question_message_field"></div>
+                        <div class="radio_group">
+                            {% for y in range(questions[i].answers|length) %}
+                            <div class="container_radio">
+                               
+                                <input type="radio" id="question_{{i}}" name="question_{{i}}_answer" value="{{questions[i].answers[y].id}}">
+                                <div class="radio_label">{{questions[i].answers[y].answer_text}}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                </div>
+            {% endfor %}
+            <div id="question_evaluation" class="question_message_field"></div>
+            <button class="btn-submit"  onclick="checkResponses('{{quiz.id}}','{{questions|length}}','{{quiz.module_id}}')">Check</button>
+            
+        </div>
+        
+        <!-- END QUIZ CONTENT -->
+         <div class="bottomNav">
+
+                <div class="dropdownbutton left">
+                    <a class="nextbutton" href="/modules/module/{{quiz.module_id}}/part/{{quiz.part_id}}">Previous</a>
+                    <div class="nextbutton_content">{{navigator.current_title}}</div>
+                </div>
+
+            {% if navigator.next_page %}
+                <div class="dropdownbutton right">
+                    <a class="nextbutton" href="/modules/module/{{quiz.module_id}}/part/{{navigator.next_page}}">Next</a>
+                    <div class="nextbutton_content">{{navigator.next_title}}</div>
+                </div>
+                
+            {% else %}
+                {% if final_quiz.exists %}
+                    {% if not canProceed %}
+                        <div id="inactive_parent" class="dropdownbutton right inactive">
+                            <div id="inactive_nextbutton" class="nextbutton" href="/modules/module/{{quiz.module_id}}/exam">Next</div>  
+                            <div id="inactive_nextbutton_label" class="nextbutton_content">Complete all parts to access the Exam.</div>
+                        </div>
+                    {% else %}
+                        <div class="dropdownbutton right">
+                        <a class="nextbutton" href="/modules/module/{{quiz.module_id}}/exam">Next</a>  
+                        <div class="nextbutton_content">Exam</div>
+                    </div>
+                        
+                    {% endif %}
+
+                    
+                {% else %}
+                    {% if not canProceed %}
+                        <div id="inactive_parent" class="dropdownbutton right inactive">
+                            <div id="inactive_nextbutton" class="nextbutton" href="/modules/module/{{quiz.module_id}}/exam">Next</div>  
+                            <div id="inactive_nextbutton_label" class="nextbutton_content">Complete all parts to complete Module.</div>
+                        </div>
+                    {% else %}
+                        <div class="dropdownbutton right">
+                            <a class="nextbutton" href="/modules/module/{{quiz.module_id}}/finish">Finish</a>
+                            <div class="nextbutton_content">Finish the Module</div>
+                        </div>
+                        
+                    {% endif %}
+                    
+                    
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+   
+</div>
+
+
+
+ <!-- FOOTER -->
+
+
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/price_format.js') }}"></script>
+<script src="{{ url_for('static', filename='js/quiz_functionality.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+<script>
+    function toggleSearch() {
+        document.getElementById("search-overlay").classList.add("active");}
+
+    function closeSearch() {
+        document.getElementById("search-overlay").classList.remove("active");}
+</script>
+</body>
+</html>

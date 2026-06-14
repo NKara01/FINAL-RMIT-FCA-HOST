@@ -1,0 +1,161 @@
+<nav>
+<a href="/" class="nav-logo">
+    <div class="nav-logo-circle">
+        <img src="{{ url_for('static', filename='assets/food_computing_logo.jpg') }}" alt="no img found :(">
+    </div>
+    Food Computing Academy
+</a>
+
+
+<div class="nav_left">
+<ul class="nav-links">
+ {%  if request.path == '/' %}
+<li><a href="/" class="active">Home</a></li>
+{% else %}
+<li><a href="/">Home</a></li>
+{% endif %}
+
+
+
+{%  if '/admin' in request.path %}
+  <li><a href="/admin" class="active">Admin</a></li>
+{% else %}
+
+
+
+  {%  if '/about_team' in request.path %}
+  <li><a href="/about_team" class="active">About us</a></li>
+  {% else %}
+  <li><a href="/about_team">About us</a></li>
+  {% endif %}
+
+  {%  if '/programs' in request.path %}
+  <li><a href="/programs" class="active">Programs</a></li>
+  {% else %}
+  <li><a href="/programs">Programs</a></li>
+  {% endif %}
+
+  {%  if '/modules' in request.path %}
+  <li><a href="/modules" class="active">Modules</a></li>
+  {% else %}
+  <li><a href="/modules">Modules</a></li>
+  {% endif %}
+
+
+  {%  if '/events' in request.path %}
+  <li><a href="/events" class="active">Events</a></li>
+  {% else %}
+  <li><a href="/events">Events</a></li>
+  {% endif %}
+
+  {%  if '/blogs' in request.path %}
+  <div class="newsdropdown">
+    <li><a href="/blogs" class="newsdropbtn active">Blogs ▾</a>
+    <div class="newsdropdown-content">
+      {% if session.get('user_id') %}
+      <a href="/news">News</a>
+      <a href="/forum">Forums</a>
+      <a href = "/blogs">Blogs</a>
+      
+      {% else %}
+      <a href="/login">News</a>
+      <a href="/login">Forums</a>
+      
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <div class="newsdropdown">
+    <li><a href="/blogs" class="newsdropbtn ">Blogs ▾</a>
+    <div class="newsdropdown-content">
+      {% if session.get('user_id') %}
+      <a href="/news">News</a>
+      <a href="/forum">Forums</a>
+      <a href = "/blogs">Blogs</a>
+      {% else %}
+      <a href="/login">News</a>
+      <a href="/login">Forums</a>
+      
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  </li>
+{% endif %}
+</ul>
+</div>
+
+<div class="nav-right">
+    {% if session.get('user_id') %}
+        
+            <div class="dropdown">
+        <span class = "dropdown-start" style="color: var(--muted); font-size: 13px;">{{ session.get('user_email') }} ▾</span>
+        <div class="dropdown-content">
+            <a href="/profile/{{ session.get('user_id') }}" class="dropdown_entry">Profile</a>
+            {% if session['role'] in ['admin', 'masteradmin'] %}
+            <a href="/admin" class="dropdown_entry">Administrator Dashboard</a>
+            {% endif %}
+            <a href="/logout" class="dropdown_entry">Log out</a>
+        </div>
+    </div>
+    {% else %}
+        <a href="/login" class="contactus-link">Sign in</a>
+    {% endif %}
+    {%  if not '/admin' in request.path  %}
+      <a href="/contact_us" class="contactus-link">Contact us</a>
+      <button class="btn-search" onclick="toggleSearch()">Search</button>
+    {% endif %}
+</div>
+
+
+<div class="dropdown_navbar">
+  <button class="dropbtn_navbar">Menu ▾</button>
+  <div class="dropdown_navbar_content">
+
+ {%  if request.path == '/' %}
+<a href="/" class="active">Home</a>
+{% else %}
+<a href="/">Home</a>
+{% endif %}
+
+
+
+{%  if '/admin' in request.path %}
+  <a href="/admin" class="dactive">Admin</a>
+{% else %}
+ {% endif %}
+
+
+  {%  if '/about_team' in request.path %}
+  <a href="/about_team" class="dactive">About us</a>
+  {% else %}
+  <a href="/about_team">About us</a>
+  {% endif %}
+
+  {%  if '/programs' in request.path %}
+  <a href="/programs" class="dactive">Programs</a>
+  {% else %}
+  <a href="/programs">Programs</a>
+  {% endif %}
+
+  {%  if '/modules' in request.path %}
+  <a href="/modules" class="dactive">Modules</a>
+  {% else %}
+  <a href="/modules">Modules</a>
+  {% endif %}
+
+
+  {%  if '/events' in request.path %}
+  <a href="/events" class="dactive">Events</a>
+  {% else %}
+  <a href="/events">Events</a>
+  {% endif %}
+
+  </div>
+</div>
+
+
+
+
+</nav>

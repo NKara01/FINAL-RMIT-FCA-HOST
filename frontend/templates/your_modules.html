@@ -1,0 +1,199 @@
+<!-- COntains the modules you've purchased -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modules | Food Computing Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/all_modules.css') }}">
+<link rel="stylesheet" href="js/homepage.js">
+</head>
+<body onload="progressBar()">
+
+<!-- NAV -->
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+<!-- MODULE LISTING APPROXIMATION -->
+ <!-- im just winging it and having something to show in terms of modules -->
+<div class="modules_title">
+    <div class="intro_right">
+        
+    </div>
+    
+    <div class="intro_left">
+        <h1>Food Computing Modules</h1>
+    </div>
+</div>
+ <div class = "module_features">
+    <button class="btn-search">
+        <img src="{{ url_for('static', filename='assets/filter.png') }}" alt="Filter">
+        Filter : A-Z
+        <!-- Stuck at latest for now -->
+    </button>
+    <div class="search-box">
+        <input type="text" placeholder="Search..." id="search-input">
+    </div>
+</div>
+<div class="modules_list">
+    {% for module in modules %}
+        <div class="module">
+
+        <div class="module_card_title">
+        <div class="module_title_section">
+            {% if module.image_url %}
+                <img class="module_image yourmodule" src="{{ url_for('static', filename=module.image_url) }}">
+            {% endif %}
+        </div>
+
+        <div class="module_title_section">
+            <div class="title2">
+                <h3>{{module.title}}</h3>
+            </div>
+            <h5 class="module_description">{{ module.description[:100] }}{% if module.description|length > 200 %}…{% endif %}</h5>
+        </div>
+        </div>
+
+            
+            
+            <div class="paid_module_section">
+                <b>Last visited Part:</b> 
+                <p>{{module.current_part_title}}</p>
+            </div>
+
+            <div class="paid_module_section">
+                <b>Score: </b> 
+                <p>{{module.score}}</p>
+            </div>
+
+            <div class="your_progress_section">
+                <b>Progress</b>
+                <div class="progress_bar">
+                    <div class="progress_bar_fill" name="{{module.progress_percent}}">{{module.progress_percent}}%</div>
+                    
+                </div>
+                
+            </div>
+            <div class="title">
+                <a class="btn-submit" href="/modules/view/{{module.id}}">Details...</a>
+                
+                <!-- For this URL, validate to see if it has been purchased yet -->
+                <a class="btn-submit" href="/modules/module/{{module.id}}">
+  
+                    {% if module.progress_percent == 100 %}
+                    Retry
+                    {% elif module.progress_percent > 0 %}
+                    Continue
+                    {% else %}
+                    Start
+                    {% endif %}
+                </a>
+             </div>
+
+        </div>
+    {% endfor %}
+</div>
+
+    {% if pages > 1 %}
+    <div class ="paginator">
+        {% if page > 1 %}
+        <a class = "page_button arrow_button" href="/modules/your_modules?page={{page-1}}">
+            &lt;
+        </a>
+        <a class = "page_button" href="/modules/your_modules?page=1">
+            1
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &lt;
+            </div>
+         {% endif %}
+         <!-- custom pagenumber -->
+          {% if page-3 > 1 %}
+            <div class="show_input">
+                <form id="custom_page_input1" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('1')" class="page_button">
+                    ...
+                </button>
+            </div>
+          {% endif %}
+        <!-- 2 pages prior -->
+         {%for i in range(page-2,page)%}
+            {% if i > 1%}
+                <a class = "page_button" href="/modules/your_modules?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+
+        <a class = "page_button active" href="/modules/your_modules?page={{page}}">
+            {{page}}
+        </a>
+        <!-- 2 pages after -->
+        {%for i in range(page+1,page+3)%}
+            {% if i < pages%}
+                <a class = "page_button" href="/modules/your_modules?page={{i}}">
+                    {{i}}
+                </a>
+            {% endif %}
+        {%endfor%}
+         <!-- custom pagenumber -->
+        {% if page+3 < pages %}
+            <div class="show_input">
+                <form id="custom_page_input2" style="display:none">
+                    <input class="inputbox" type="number" id="paginatorcustom" name="page" min="1" max="{{pages}}" placeholder="Page" required>
+                </form>
+                <button onclick="showCustomPageInput('2')" class="page_button">
+                    ...
+                </button>
+            </div>
+            
+          {% endif %}
+
+        {% if page < pages %}
+        <a class = "page_button" href="/modules/your_modules?page={{pages}}">
+            {{pages}}
+        </a>
+        <a class = "page_button arrow_button" href="/modules/your_modules?page={{page+1}}">
+            &gt;
+        </a>
+        {% else %}
+            <div class = "page_button arrow_button inactive">
+                &gt;
+            </div>
+         {% endif %}
+
+    </div>
+    {% endif %}
+    <!-- END PAGINATOR -->
+ 
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/price_format.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+<script src="{{ url_for('static', filename='js/progress_bar.js') }}"></script>
+<script>
+    function toggleSearch() {
+        document.getElementById("search-overlay").classList.add("active");}
+
+    function closeSearch() {
+        document.getElementById("search-overlay").classList.remove("active");}
+</script>
+</body>
+</html>

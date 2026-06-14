@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Email | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+</head>
+<body>
+<nav>
+<a href="/" class="nav-logo">
+        <div class="nav-logo-circle">
+            <img src="{{ url_for('static', filename='assets/food_computing_logo.jpg') }}" alt="Food Computing Academy logo">
+        </div> Food Computing Academy
+    </a>
+    <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    </ul> 
+</nav>
+{% include 'popups.html' %}
+
+<div class="form-container">
+    <h2>Check your inbox</h2>
+    <p style="color:var(--muted);">
+        We sent a verification link to <strong>{{ email }}</strong>.<br><br>
+        Click the link in that email to finish the sign up </p>
+    <p style="font-size:13px; color:var(--muted); margin-top:1rem;">
+        If you cant see the link, check spam folders! Link is valid for 1 hour only
+    </p>
+<a href="/create_account" class="btn-submit" style="margin-top:1.5rem; display:inline-block;">
+    Start over
+</a>
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

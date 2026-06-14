@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recent News | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+</head>
+<body>
+
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+<!-- HERO -->
+<section class="hero">
+<div class="hero-content">
+
+
+    <h1>Transforming Food Manufacturing Through Data, Science & Technology</h1>
+    <p>Helping food and beverage SMEs modernise, scale, and compete through digital tools, scientific practices, and workforce development. We are the link to easy food education for all</p>
+    
+    {% if not session.get('user_id') %}
+        <a href="/create_account" class="btn-primary">Join the Community</a>
+   
+    <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        
+            <a href="/programs" class="btn-secondary">Explore Programs</a>
+        {% endif %}
+        {% if session.get('user_id') %}
+            <a href="/modules" class="btn-primary"> Modules</a>
+            
+            <a href="/programs" class="btn-secondary"> Programs</a>
+        {% endif %}
+        
+    </div>
+
+
+
+</div>
+<div class="hero-image-box">     
+    
+    <div class="mySlides fade">
+        
+        <img class="homepageimg" src="{{ url_for('static', filename='assets/scientists.png') }}" alt="Scientists">
+        
+    </div>
+
+    <div class="mySlides fade">
+        
+        <img class="homepageimg" src="{{ url_for('static', filename='assets/food.jpg') }}" style="width:100%">
+        
+    </div>
+
+    <div class="mySlides fade">
+        
+        <img  class="homepageimg" src="{{ url_for('static', filename='assets/research.jpg') }}" style="width:100%">
+        
+    </div>
+    
+    
+  <div class="carousel-dots">
+    
+       
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        
+    </div>
+  
+    
+
+</div>
+    
+
+     
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+    <div>
+       
+    </div>
+    <div class="about-image-box">
+        <h2>What is FCA?</h2>
+        <p class="about-description">Food Computing Academy (FCA) is a specialised accelerator that helps food and beverage SMEs adopt data-driven, technology-enabled ways of working. <br> <br> We bridge the gap between traditional food production and modern digital transformation by combining food science, AI, and practical manufacturing expertise.</p>
+        <p class="about-sig">— Food Computing Academy</p>
+    </div>
+</section>
+
+<!-- the problems we solve-->
+<section class="theproblemwesolve">
+    <div class="problemsectionleft">
+
+        <h1 class="problemtitle">
+        The Problems We Solve
+        </h1>
+
+    </div>
+
+
+<div>   
+<ul>
+
+
+    <li class="problembutton button1">
+        <div>
+    <h2>Digital and AI tools <br>feel inaccessible for SMEs</h2>
+        </div>
+        <div class="problemdropdown">
+            why it matters: To help create more scalable SMEs compete and innovate in a rapidly evolving industry 
+        </div>
+    </li>
+
+
+    <li class="problembutton button2">
+        <div >
+    <h2>Limited access to specialised training  combining <br> food science and technology</h2>
+    </div>
+ <div class="problemdropdown">
+           why it matters: To Improved food safety, quality, and compliance 
+        </div>
+</li>
+   
+    <li class="problembutton button3"><div >
+    <h2>Operational knowledge is often siloed <br> or undocumented</h2>
+    </div>
+ <div class="problemdropdown">
+            why it matters: Data-driven decision-making instead of guesswork
+        </div>
+
+
+</li>
+
+
+    <li class="problembutton button4"><div >
+   <h2> Lack of structured pathways <br> for emerging talent</h2>
+    </div>
+ <div class="problemdropdown">
+            Why it matters: To create a future-ready, digitally skilled workforce
+        </div>
+</li>
+</ul>
+
+    
+
+
+
+    </div>
+
+
+
+
+</section>
+<!-- programs section -->
+<section class="programsection">
+  <div class="programshell">
+    
+    <div class="programleft">
+      <p class="programeyebrow">What we offer</p>
+      <h2>OUR<br>PROGRAMS</h2>
+    </div>
+
+    <div class="programmiddle">
+      <div class="carouselcontainer">
+        <div class="carouselstack" aria-live="polite">
+          <div class="poly1 c1 active"
+               data-title="Digital Food Manufacturing Foundations"
+               data-desc="Build core knowledge in digital manufacturing for food production, including smart systems, automation, and practical industry workflows.">
+            Digital Food Manufacturing Foundations
+          </div>
+
+          <div class="poly1 c2"
+               data-title="Applied Food Safety &amp; Microbiology"
+               data-desc="Learn how microbiology, contamination control, and food safety systems work together in real production and quality settings.">
+            Applied Food Safety &amp; Microbiology
+          </div>
+
+          <div class="poly1 c3"
+               data-title="SME Transformation Accelerator"
+               data-desc="Support small and medium enterprises with practical digital transformation, process improvement, and operational uplift.">
+            SME Transformation Accelerator
+          </div>
+
+          <div class="poly1 c4"
+               data-title="Workforce Readiness Program"
+               data-desc="Prepare learners and workers with practical skills, confidence, and industry-ready capabilities for modern food-sector roles.">
+            Workforce Readiness Program
+          </div>
+        </div>
+
+        <button class="polybutton" type="button" aria-label="Next program">
+          Next
+        </button>
+      </div>
+    </div>
+
+    <div class="programright">
+      <div class="programcard">
+        <p class="programtag">Program overview</p>
+        <h3 id="program-title">Digital Food Manufacturing Foundations</h3>
+        <p id="program-desc">
+          Build core knowledge in digital manufacturing for food production, including smart systems, automation, and practical industry workflows.
+        </p>
+      </div>
+      <br>
+
+      <a href="/programs" class="btn-secondary"> Learn More</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- what we do -->
+<section class="ourmission">
+    <div class="ourmissionleft">
+            <h2>What We Do</h2>
+        <ul style="list-style-type: none;">
+            <li class="ourmissiondropdown"> <a href="/about_team"> Digital Food Manufacturing<div class="ourmissiondropdown-content">Using data, AI, and automation to improve efficiency and decision-making</div></a></li>
+            <li class="ourmissiondropdown"> <a href="/about_team"> Food Safety & Microbiology<div class="ourmissiondropdown-content">Strengthening scientific practices for safer, more stable products</div></a></li>
+            <li class="ourmissiondropdown"> <a href="/about_team">SME Transformation & Systems<div class="ourmissiondropdown-content">Building structured, scalable, and compliant operations</div></a></li>
+            <li class="ourmissiondropdown"> <a href="/about_team">Workforce Development<div class="ourmissiondropdown-content">Training future-ready professionals with digital and industry skills</div></a></li>
+
+        </ul>
+    </div>
+
+
+    <div class="ourmissionright"> 
+        
+        <p class="ourmission-description">Our mission is to build the bridge between food production and food safety in every day life. We have research teams from different countries around the globe working diligently to gather new findings in microbiology food-related procedures.</p>
+    
+        
+    </div>
+</section>
+
+
+
+
+
+
+
+<!-- LATEST NEWS -->
+<section class="news-section">
+    <div class="section-header">
+        <h2>Latest News</h2>
+        <a href="/news" class="see-all">See all →</a>
+    </div>
+<div class="news-whole">
+    <div class="event-side"><button onclick="gobacknews()" class="eventbutton">Prev</button></div> 
+    <div class="news-grid">
+
+
+{% for new in news %}
+  <div class="news-card" onclick="window.location.href='/news/article/{{ new.id }}'" style="cursor:pointer;">
+      <img src="{{ url_for('static', filename=new.image_url) }}" alt="{{ new.title }}" class="news-card-img">
+      <div>
+          <div class="news-tag">by: {{ new.company }}</div>
+          <h3>{{ new.title }}</h3>
+          <div class="news-meta">{{ new.created }} AEST</div>
+      </div>
+  </div>
+{% else %}
+  <p>no news</p>
+{% endfor %}
+</div> 
+  <div class="event-side"><button onclick="gonextnews()" class="eventbutton">Next</button></div></div>
+</section>
+
+
+
+
+
+<!-- UPCOMING EVENTS -->
+<div class="events-section">
+
+<h2>Upcoming Events</h2>
+
+<div class="event-whole">
+
+<div class="event-side"><button onclick="gobackevents()" class="eventbutton">Prev</button></div> 
+
+
+<div class="events-grid">
+      {% for event in events %}
+        <a class="event-card" href="/events/{{event.id}}">
+            
+                <img src="{{ event.image }}" alt="{{ event.title }}" class="event-card-img">
+            <div>
+                <div class="event-tag">Events: {{ event.date }}</div>
+                <h3> {{ event.title }}</h3>
+                <div class="event-meta"> {{ event.time }} AEST</div>
+            </div>
+        </a>
+        {% else %}
+        <p>no events</p>
+    {% endfor %}
+</div> 
+
+
+<div class="event-side"><button onclick="gonextevents()" class="eventbutton">Next</button></div>
+</div>
+
+
+
+
+</div>
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<div class="footer-bottom">2026 food computing academy.</div>
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+</body>
+</html>

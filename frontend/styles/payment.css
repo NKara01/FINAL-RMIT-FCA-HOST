@@ -1,0 +1,128 @@
+.payment-page {
+    max-width: 1120px;
+    margin: 2.5rem auto 4rem;
+    padding: 0 2rem;
+}
+
+.payment-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.payment-card {
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+    color: var(--white);
+}
+
+.payment-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1.1;
+    margin-bottom: 1.75rem;
+    color: var(--white);
+}
+
+.payment-card .form-group {
+    margin-bottom: 1.15rem;
+}
+
+.payment-card .form-group label {
+    color: #9fb0cc;
+    font-weight: 600;
+}
+
+.payment-card .form-group input,
+.payment-card .form-group textarea {
+    min-height: 48px;
+    background: rgba(255, 255, 255, 0.075);
+    border-color: rgba(255, 255, 255, 0.13);
+    color: var(--white);
+}
+
+.payment-card .form-group input:focus,
+.payment-card .form-group textarea:focus {
+    border-color: var(--green);
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.payment-card .form-group input::placeholder,
+.payment-card .form-group textarea::placeholder {
+    color: #9fb0cc;
+}
+
+.payment-card .form-group input:invalid,
+.payment-card .form-group textarea:invalid {
+    border-color: rgba(255, 138, 138, 0.55);
+}
+
+.payment-card .form-group textarea {
+    min-height: 125px;
+}
+
+.payment-card .btn-submit {
+    min-height: 50px;
+    color: var(--navy);
+    box-shadow: 0 10px 24px rgba(43, 204, 135, 0.18);
+}
+
+.payment-locked-msg {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+    padding: 4.5rem 2rem;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.hidden {
+    display: none;
+}
+
+#payment-element {
+    margin-bottom: 1.5rem;
+}
+
+#payment-element-wrapper {
+    color: var(--white);
+}
+
+#payment-message {
+    color: #ff8a8a;
+}
+
+.payment-body {
+    background: linear-gradient(180deg, #142956 0%, #102349 52%, #0d1d3d 100%);
+    min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+    .payment-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-card {
+        padding: 1.6rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .payment-page {
+        margin: 1.5rem auto 3rem;
+        padding: 0 1rem;
+    }
+
+    .payment-card {
+        padding: 1.25rem;
+    }
+
+    .payment-card h2 {
+        font-size: 1.7rem;
+    }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/about_us.css') }}">
+</head>
+<body>
+
+<!-- NAV -->
+
+{% include 'nav.html' %}
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+<!-- HERO -->
+<section class="title_about">
+    <div class="title_sector">
+        <h1>Food Computing Academy</h1>
+    <img src="{{ url_for('static', filename='assets/scientists.png') }}" alt="Scientists">
+    </div>
+    
+</section>
+ <!-- ABOUT US TEXT -->
+<section class="about_us_body">
+    <p>We bagan as a small team of researhcers with a dream. Our visions and passion for education became a common ground for us to start with small research programs to educate the public on the importance of food research. After a couple of years, our member count grw from 5 to over 20, with members from across the globe. Here at FCA, weare more than acommunity, we're a family. We strive towards food research excellency. Our dedicatdd team aims only for the most thoroughly proven results and deliver quality education.</p>
+</section>
+<!--OUR TEAM: CONSISTENT ACROSS ALL VERSIONS -->
+<section class="our_team">
+    <h3>Our Team</h3>
+    {% set team_members = [
+        {
+            "name": "Jun Hao Bai",
+            "role": "Executive Director",
+            "image": "assets/defaults/jun_hao.png",
+            "bio": "Executive Director and founder of the Food Computing Academy - Doctorate in Microbiology aiming to provide microbiology learning to all"
+        },
+        {
+            "name": "Dencelle Mercines",
+            "role": "Chief Operations Officer",
+            "image": "assets/image_man.png",
+            "bio": "With my background in chemical engineering - We aim to make food biology a learnable topic for all"
+        },
+        {
+            "name": "Railene Pagsanjan",
+            "role": "Head Researcher",
+            "image": "assets/image_man.png",
+            "bio": "With my research, a scientist in training, I aim to publish it all for the users of the FCA to avoid the industry food microbiology paywall"
+        }
+    ] %}
+    <div class="Team_Members">
+        {% for member in team_members %}
+            <div class="team_member">
+                <div class="imgHover">
+                    <img src="{{ url_for('static', filename=member.image) }}" alt="{{ member.name }}">
+                    <div class="team_dropdown-content">
+                        <p>{{ member.bio }}</p>
+                    </div>
+                </div>
+                <h5>{{ member.name }}</h5>
+                <p>{{ member.role }}</p>
+            </div>
+        {% endfor %}
+
+        {% for slot in range(15 - team_members|length) %}
+            <div class="team_member team_member_placeholder">
+                <div class="imgHover">
+                    <span class="placeholder_avatar">+</span>
+                    <div class="team_dropdown-content">
+                        <p>This space is ready for a future team member profile.</p>
+                    </div>
+                </div>
+                <h5>Team Member</h5>
+                <p>Coming Soon</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/about_us.js') }}"></script>
+</body>
+</html>

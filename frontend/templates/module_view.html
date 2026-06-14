@@ -1,0 +1,119 @@
+<!-- A detailed view of a module, containing parts -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{module.title}} | Food Computing Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="js/homepage.js">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/module_view.css') }}">
+</head>
+<body onload="progressBar()">
+
+<!-- NAV -->
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+<div class="module_view_header">
+
+<h1>{{module.title}}</h1>
+
+</div>
+
+
+<div class="module_view">
+    <div class="module_information">
+        {% if module.image_url %}
+        <img class="module_image allmodules" src="{{ url_for('static', filename=module.image_url) }}">
+        {% endif %}
+        <p>{{module.description}}</p>
+        <div class="module_part_view">
+            <h2>Module components</h2>
+            {% for part in parts %}
+            <div class="part">
+                <h3>{{part.part_number}}. {{part.title}}</h3>
+            </div>
+            {% endfor %}
+            {% if has_final_exam %}
+                <p>This module has a final quiz.</p>
+            {% endif %}
+            
+        </div>
+    </div>
+    <div class="purchase_sidebar">
+        {% if module.not_purchased == 1 %}
+        <div class="your_module_section">
+                <h5>Price: </h5> 
+                <b>${{module.price}}</b>
+            </div>
+            
+        {% else %}
+            <p>Purchased on {{module_progress.purchased_at}}</p>
+            <div class="your_module_section">
+                <h5>Last visited Part:</h5> 
+                <p>{{module_progress.current_part_title}}</p>
+            </div>
+            <div class="your_module_section">
+                <h5>Score: </h5> 
+                <p>{{module_progress.score}}</p>
+            </div>
+            <div class="your_module_section">
+                <h5>Progress</h5>
+                <div class="progress_bar">
+                    <div class="progress_bar_fill" id="progress_bar" name="{{module_progress.progress_percent}}">{{ "%.2f"|format(module_progress.progress_percent) }}%</div>
+                </div>
+                
+            </div>
+        {% endif %}
+        {% if session.get('user_id') %}
+            {% if module.not_purchased == 1 %}
+            <form action="/modules/view/{{module.id}}" method="POST">
+                <button class="btn-submit" href="/modules/view/{{module.id}}">Buy Now</button>
+            </form>
+            {% else %}
+            <a class="btn-submit" href="/modules/your_modules">View in your Modules</a>
+            <a class="btn-submit" href="/modules/module/{{module.id}}">
+                    {% if module_progress.progress_percent == 100 %}
+                    Retry
+                    {% elif module_progress.progress_percent > 0 %}
+                    Continue
+                    {% else %}
+                    Start
+                    {% endif %}</a>
+            {% endif %}
+        {% else %}
+        <a class="btn-submit" href="/login">Login to purchase</a>
+        {% endif %}
+    </div>
+</div>
+ <!-- FOOTER -->
+
+
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/price_format.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+<script src="{{ url_for('static', filename='js/progress_bar.js') }}"></script>
+<script>
+    function toggleSearch() {
+        document.getElementById("search-overlay").classList.add("active");}
+
+    function closeSearch() {
+        document.getElementById("search-overlay").classList.remove("active");}
+</script>
+</body>
+</html>

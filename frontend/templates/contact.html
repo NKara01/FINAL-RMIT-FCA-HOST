@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/contact_us.css') }}">
+</head>
+<body>
+
+<!-- NAV -->
+{% include 'nav.html' %}
+{% include 'popups.html' %}
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+<!-- HERO -->
+<section class="contact_us">
+    <div class="text_section">
+        <h1>Contact Us</h1>
+        <p>Let us know how we can assist with you. Use the contact form to get in touch with us.</p>
+    </div>
+    <form >
+        <div class="form-group">
+            <label>name</label>
+            <input type="name" name="name" required placeholder="Your name...">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="John@email.com">
+        </div>
+        <div class="form-area">
+            <label>Comment</label>
+            <textarea id="textinput" name="textinput" required placeholder="Your message...">
+            </textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message</button>
+    </form>
+    
+</section>
+ <!-- ABOUT US TEXT -->
+
+<!-- FOOTER -->
+{% include 'footer.html' %}
+
+<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+</body>
+</html>

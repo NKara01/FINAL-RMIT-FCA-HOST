@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{article.title}} | Food Computing Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styling.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='styles/article.css') }}">
+</head>
+<body>
+
+    {% include 'nav.html' %}
+    {% include 'popups.html' %}
+
+<div class="search-overlay" id="search-overlay">
+    <div class="search-box">
+        <form method="GET" action="/search" style="display:flex; gap:1rem; flex:1;">
+            <input type="text" name="q" placeholder="Search..." id="search-input" autocomplete="off">
+            <button type="submit" style="background:none; border:none; color:var(--muted); font-size:18px; cursor:pointer;">⏎</button>
+        </form>
+        <button onclick="closeSearch()">✕</button>
+    </div>
+</div>
+
+    <section class="article_title_section">
+        <img src="{{ url_for('static', filename=article.image_url) }}" alt="no img found :(">
+        <div class="article_title">
+            <h1>{{article.title}}</h1>
+            <p>Author: {{article.author}}</p>
+            <p>{{article.date}}</p>
+        </div>
+        
+    </section>
+
+    <section class="article_body">
+        <div class="bodytext">
+            <p id="body_text">{{article.body}}</p>
+            <p class="details">Author: {{article.author}}</p>
+            <p class="details">{{article.date}}</p>
+            {% if article.user_id == session.get('user_id') and session['role'] == 'admin' %}
+                <div class="article_buttons">
+                    <button class="btn-submit" onclick="toggleIds(['body_text','edit_article_form'])">Edit</button>
+                    <form action="/news/article/{{article.id}}?page={{page}}" method="POST">
+                        <button class="btn-submit" name="deleteNews">Delete</button>
+                    </form>
+                </div>
+                
+                <form id="edit_article_form" style="display:none" class="make_a_comment edit_article" action="/news/article/{{article.id}}" method="POST" enctype="multipart/form-data">
+                    <h3>Edit News</h3>
+                    <div class="form-divider">
+                        
+                        <label for="title">Title</label>
+                        <input type="text" name="title" placeholder="Enter Title Here..." value="{{article.title}}" required>
+                    </div>
+                    <div class="form-divider">
+                        
+                        <label for="company">Company</label>
+                        <input type="text" name="company" placeholder="Enter Company Here..." value="{{article.company}}" required>
+                    </div>
+                    <div class="form-divider">
+                        
+                        <label for="body">Text</label>
+                        <textarea id="textinput" name="body" placeholder="Add information here...">{{article.body}}</textarea>
+                    </div>
+                    <div class="image_container">
+                        <input type="hidden" value="{{article.image_url}}" name="old_image" />
+                        <!-- https://stackoverflow.com/questions/4459379/preview-an-image-before-it-is-uploaded -->
+                        <img id="blah" src="#" alt="Your new article image will display here" />
+                        <label for="file">Article Image</label>
+                        <input multiple accept="image/*" type="file" id="imgInp" name="file" />  
+                    </div>
+                    <button type="submit" class="btn-submit button2"  name="editNews">Edit news</button>
+                </form>
+             {% endif %}
+        </div>
+
+<aside class="events-sidebar">
+<h2>Upcoming Events</h2>
+
+<div class="sidebar-events-list">
+{% for event in events %}
+<a href="/events/{{event.id}}" class="sidebar-event-card">
+        {% if event.image %}
+                <img src="{{ event.image }}" alt="{{ event.title }}">
+        {% else %}
+            <img src="/frontend/assets/placeholder.png" alt="Event">
+        {% endif %}
+        <div class="sidebar-event-content">
+        <h3>{{ event.title }}</h3>
+        <div class="news-list-meta">{{ event.date }} | {{ event.time }} AEST</div>
+        {% if event.location %}
+            <div class="news-list-meta" style="margin-top:4px;">{{ event.location }}</div>
+        {% endif %}
+        </div>
+    </a>
+    {% else %}
+        <p style="color:var(--muted); font-size:13px;">No upcoming events.</p>
+    {% endfor %}
+    </div>
+
+    <div class="sidebar-more-wrap">
+        <a href="/events" class="sidebar-more-btn">More....</a>
+    </div>
+</aside>
+        </div>
+    </section>
+
+ {% include 'footer.html' %}
+
+    <script>
+        function toggleSearch() {
+            document.getElementById("search-overlay").classList.add("active");}
+
+        function closeSearch() {
+            document.getElementById("search-overlay").classList.remove("active");}
+    </script>
+        <script src="{{ url_for('static', filename='js/toggle_elements.js') }}"></script>
+
+</body>
+</html>
